@@ -28,50 +28,53 @@ class _DataTableCarrerasState extends State<DataTableCarreras> {
       future: futureAlbum,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return DataTable(
-            columns: const <DataColumn>[
-              DataColumn(
-                label: Expanded(
-                  child: Text(
-                    'Carrera',
+          return Container(
+            margin: EdgeInsets.only(bottom: 450),
+            child: DataTable(
+              columns: const <DataColumn>[
+                DataColumn(
+                  label: Expanded(
+                    child: Text(
+                      'Carrera',
+                    ),
                   ),
                 ),
-              ),
-              DataColumn(
-                label: Expanded(
-                  child: Text(
-                    'Inscriptos',
+                DataColumn(
+                  label: Expanded(
+                    child: Text(
+                      'Inscriptos',
+                    ),
                   ),
                 ),
-              ),
-              DataColumn(
-                label: Expanded(
-                  child: Text(
-                    '',
+                DataColumn(
+                  label: Expanded(
+                    child: Text(
+                      '',
+                    ),
                   ),
                 ),
-              ),
-            ],
-            rows: <DataRow>[
-              DataRow(
-                cells: <DataCell>[
-                  DataCell(Text(snapshot.data!.id.toString())),
-                  DataCell(Text(snapshot.data!.title)),
-                  DataCell(IconButton(
-                      onPressed: () => {print("dw")},
-                      icon: Icon(Icons.more_horiz))),
-                ],
-              ),
-              DataRow(
-                cells: <DataCell>[
-                  DataCell(Text('Janine')),
-                  DataCell(Text('43')),
-                  DataCell(IconButton(
-                      onPressed: () => {print("dw")},
-                      icon: Icon(Icons.more_horiz)))
-                ],
-              ),
-            ],
+              ],
+              rows: <DataRow>[
+                DataRow(
+                  cells: <DataCell>[
+                    DataCell(Text(snapshot.data!.id.toString())),
+                    DataCell(Text(snapshot.data!.title)),
+                    DataCell(IconButton(
+                        onPressed: () => {print("dw")},
+                        icon: Icon(Icons.more_horiz))),
+                  ],
+                ),
+                DataRow(
+                  cells: <DataCell>[
+                    DataCell(Text('Janine')),
+                    DataCell(Text('43')),
+                    DataCell(IconButton(
+                        onPressed: () => {print("dw")},
+                        icon: Icon(Icons.more_horiz)))
+                  ],
+                ),
+              ],
+            ),
           );
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
