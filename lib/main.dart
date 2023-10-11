@@ -64,12 +64,17 @@ class _CarrerasPageState extends State<CarrerasPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-            child: Icon(color: Colors.white, Icons.add),
-            backgroundColor: Colors.deepOrange,
-            onPressed: () => setState(() {
-                  valorInicial = valorInicial * -1;
-                })),
+        floatingActionButton: Container(
+          width: 70,
+          height: 70,
+          margin: EdgeInsets.all(5),
+          child: FloatingActionButton(
+              child: Icon(size: 35, color: Colors.white, Icons.add),
+              backgroundColor: Colors.deepOrange,
+              onPressed: () => setState(() {
+                    valorInicial = valorInicial * -1;
+                  })),
+        ),
         body: Center(
             // width: double.infinity,
             // margin: EdgeInsets.only(top: 30),
