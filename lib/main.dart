@@ -1,5 +1,7 @@
 // ignore_for_file: sort_child_properties_last, avoid_print, prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable, avoid_init_to_null, must_call_super
 
+import 'package:app_material_3/Album.dart';
+import 'package:app_material_3/service_carreras.dart';
 import 'package:flutter/material.dart';
 import 'data_table_carreras.dart';
 
@@ -45,19 +47,6 @@ class MainApp extends StatelessWidget {
                 Center(child: Text('Estudiantes')),
               ],
             ),
-            // body: Row(
-            //   children: [
-            //     Row(
-            //       children: [
-            //         Row(
-            //             mainAxisAlignment: MainAxisAlignment.center,
-            //             children: [
-            //               MyCard(),
-            //             ]),
-            //       ],
-            //     ),
-            //   ],
-            // )
           ),
         ));
   }
@@ -73,6 +62,14 @@ class CarrerasPage extends StatefulWidget {
 class _CarrerasPageState extends State<CarrerasPage>
     with AutomaticKeepAliveClientMixin<CarrerasPage> {
   var valorInicial = 1;
+  late Future<Album> futureAlbum;
+
+  @override
+  void initState() {
+    super.initState();
+
+    futureAlbum = ServiceCarrera().fetchAlbum();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,10 +81,21 @@ class _CarrerasPageState extends State<CarrerasPage>
                   valorInicial = valorInicial * -1;
                 })),
         body: Center(
-          // width: double.infinity,
-          // margin: EdgeInsets.only(top: 30),
-          child: getWidget(),
-        ));
+            // width: double.infinity,
+            // margin: EdgeInsets.only(top: 30),
+            child: FutureBuilder<Album>(
+          future: futureAlbum,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Text(snapshot.data!.title);
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+
+            // By default, show a loading spinner.
+            return const CircularProgressIndicator();
+          },
+        )));
   }
 
   Widget getWidget() => (valorInicial == 1)
