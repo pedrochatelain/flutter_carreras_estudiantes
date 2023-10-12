@@ -1,23 +1,23 @@
 import 'dart:convert';
 
-import 'package:app_material_3/Album.dart';
+import 'package:app_material_3/Carrera.dart';
 import 'package:http/http.dart' as http;
 
 class ServiceCarrera {
-  Future<Album> fetchAlbum() async {
+  Future<List<Carrera>> getCarreras() async {
     return Future.delayed(
       const Duration(seconds: 2),
       () async {
-        final response = await http
-            .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
+        final response = await http.get(Uri.parse(
+            'http://192.168.0.150:8080/api/carreras?sort=cantidad-inscriptos'));
 
         if (response.statusCode == 200) {
-          // If the server did return a 200 OK response,
-          // then parse the JSON.
-          return Album.fromJson(jsonDecode(response.body));
+          Iterable l = json.decode(response.body);
+          List<Carrera> carreras =
+              List<Carrera>.from(l.map((model) => Carrera.fromJson(model)));
+
+          return carreras;
         } else {
-          // If the server did not return a 200 OK response,
-          // then throw an exception.
           throw Exception('Failed to load album');
         }
       },

@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
 
-import 'package:app_material_3/Album.dart';
+import 'package:app_material_3/Carrera.dart';
 import 'package:app_material_3/service_carreras.dart';
 import 'package:flutter/material.dart';
 
@@ -14,22 +14,22 @@ class DataTableCarreras extends StatefulWidget {
 }
 
 class _DataTableCarrerasState extends State<DataTableCarreras> {
-  late Future<Album> futureAlbum;
+  late Future<List<Carrera>> carreras;
 
   @override
   void initState() {
     super.initState();
-    futureAlbum = ServiceCarrera().fetchAlbum();
+    carreras = ServiceCarrera().getCarreras();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Album>(
-      future: futureAlbum,
+    return FutureBuilder<List<Carrera>>(
+      future: carreras,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Container(
-            margin: EdgeInsets.only(bottom: 450),
+          var carreras = snapshot.data;
+          return SingleChildScrollView(
             child: DataTable(
               columns: const <DataColumn>[
                 DataColumn(
@@ -54,26 +54,13 @@ class _DataTableCarrerasState extends State<DataTableCarreras> {
                   ),
                 ),
               ],
-              rows: <DataRow>[
-                DataRow(
-                  cells: <DataCell>[
-                    DataCell(Text(snapshot.data!.id.toString())),
-                    DataCell(Text(snapshot.data!.title)),
-                    DataCell(IconButton(
-                        onPressed: () => {print("dw")},
-                        icon: Icon(Icons.more_horiz))),
-                  ],
+              rows: List.generate(
+                carreras!.length,
+                (index) => _resultsAPI(
+                  index,
+                  carreras[index],
                 ),
-                DataRow(
-                  cells: <DataCell>[
-                    DataCell(Text('Janine')),
-                    DataCell(Text('43')),
-                    DataCell(IconButton(
-                        onPressed: () => {print("dw")},
-                        icon: Icon(Icons.more_horiz)))
-                  ],
-                ),
-              ],
+              ),
             ),
           );
         } else if (snapshot.hasError) {
@@ -85,4 +72,22 @@ class _DataTableCarrerasState extends State<DataTableCarreras> {
       },
     );
   }
+}
+
+DataRow _resultsAPI(index, data) {
+  return DataRow(
+    cells: <DataCell>[
+      DataCell(
+        Text(
+          data.carrera,
+        ),
+      ),
+      DataCell(
+        Text(
+          data.inscriptos.toString(),
+        ),
+      ),
+      DataCell.empty
+    ],
+  );
 }
