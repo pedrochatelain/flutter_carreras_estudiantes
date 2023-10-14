@@ -11,7 +11,7 @@ class ServiceCarrera {
         final response = await http.get(Uri.parse(
             'https://carrest.onrender.com/api/carreras?sort=cantidad-inscriptos'));
         if (response.statusCode == 200) {
-          Iterable l = json.decode(response.body);
+          Iterable l = json.decode(utf8.decode(response.bodyBytes));
           List<Carrera> carreras =
               List<Carrera>.from(l.map((model) => Carrera.fromJson(model)));
 
