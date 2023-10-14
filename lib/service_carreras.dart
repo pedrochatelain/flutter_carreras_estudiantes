@@ -9,8 +9,7 @@ class ServiceCarrera {
       const Duration(seconds: 2),
       () async {
         final response = await http.get(Uri.parse(
-            'http://192.168.0.150:8080/api/carreras?sort=cantidad-inscriptos'));
-
+            'https://carrest.onrender.com/api/carreras?sort=cantidad-inscriptos'));
         if (response.statusCode == 200) {
           Iterable l = json.decode(response.body);
           List<Carrera> carreras =
