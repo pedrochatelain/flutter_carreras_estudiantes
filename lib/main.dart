@@ -71,9 +71,23 @@ class _CarrerasPageState extends State<CarrerasPage>
           child: FloatingActionButton(
               child: Icon(size: 35, color: Colors.white, Icons.add),
               backgroundColor: Colors.deepOrange,
-              onPressed: () => setState(() {
-                    valorInicial = valorInicial * -1;
-                  })),
+              onPressed: () => showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('AlertDialog Title'),
+                      content: const Text('AlertDialog description'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'Cancel'),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'OK'),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  )),
         ),
         body: Center(
             // width: double.infinity,
