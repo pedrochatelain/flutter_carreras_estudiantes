@@ -1,6 +1,7 @@
 // ignore_for_file: sort_child_properties_last, avoid_print, prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable, avoid_init_to_null, must_call_super
 
 import 'package:flutter/material.dart';
+import 'create_carrera.dart';
 import 'data_table_carreras.dart';
 
 void main() {
@@ -19,6 +20,7 @@ class MainApp extends StatelessWidget {
         home: DefaultTabController(
           length: 2,
           child: Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               toolbarHeight: 44,
               backgroundColor: Colors.deepOrange,
@@ -60,39 +62,33 @@ class CarrerasPage extends StatefulWidget {
 class _CarrerasPageState extends State<CarrerasPage>
     with AutomaticKeepAliveClientMixin<CarrerasPage> {
   var valorInicial = 1;
+  // bool showFAB = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         floatingActionButton: Container(
           width: 70,
           height: 70,
           margin: EdgeInsets.all(5),
-          child: FloatingActionButton(
-              child: Icon(size: 35, color: Colors.white, Icons.add),
-              backgroundColor: Colors.deepOrange,
-              onPressed: () => showDialog<String>(
+          child: Visibility(
+            // visible: showFAB,
+            child: FloatingActionButton(
+                child: Icon(size: 35, color: Colors.white, Icons.add),
+                backgroundColor: Colors.deepOrange,
+                onPressed: () {
+                  // setState(() {
+                  //   showFAB = false;
+                  // });
+                  showDialog<String>(
                     context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text('AlertDialog Title'),
-                      content: const Text('AlertDialog description'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, 'Cancel'),
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, 'OK'),
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    ),
-                  )),
+                    builder: (BuildContext context) => CreateCarrera(),
+                  );
+                }),
+          ),
         ),
-        body: Center(
-            // width: double.infinity,
-            // margin: EdgeInsets.only(top: 30),
-            child: DataTableCarreras()));
+        body: Center(child: DataTableCarreras()));
   }
 
   Widget getWidget() => (valorInicial == 1)
