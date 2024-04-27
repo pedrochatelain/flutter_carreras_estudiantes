@@ -62,7 +62,7 @@ class CarrerasPage extends StatefulWidget {
 class _CarrerasPageState extends State<CarrerasPage>
     with AutomaticKeepAliveClientMixin<CarrerasPage> {
   var valorInicial = 1;
-  // bool showFAB = true;
+  bool showFAB = true;
 
   @override
   Widget build(BuildContext context) {
@@ -73,23 +73,26 @@ class _CarrerasPageState extends State<CarrerasPage>
           height: 70,
           margin: EdgeInsets.all(5),
           child: Visibility(
-            // visible: showFAB,
+            visible: showFAB,
             child: FloatingActionButton(
                 child: Icon(size: 35, color: Colors.white, Icons.add),
                 backgroundColor: Colors.deepOrange,
-                onPressed: () {
-                  // setState(() {
-                  //   showFAB = false;
-                  // });
-                  showDialog<String>(
+                onPressed: () async {
+                  toggleButtonAddCarrera();
+                  var d = await showDialog<String>(
                     context: context,
                     builder: (BuildContext context) => CreateCarrera(),
                   );
+                  if (d == "OK" || d == "Cancel" || d == null) {
+                    toggleButtonAddCarrera();
+                  }
                 }),
           ),
         ),
         body: Center(child: DataTableCarreras()));
   }
+
+  void toggleButtonAddCarrera() => setState(() => showFAB = !showFAB);
 
   Widget getWidget() => (valorInicial == 1)
       ? CircularProgressIndicator()
