@@ -1,15 +1,15 @@
 // ignore_for_file: sort_child_properties_last, avoid_print, prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable, avoid_init_to_null, must_call_super
 
-import 'package:app_material_3/estudiante_provider.dart';
+import 'package:app_material_3/provider_estudiantes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'add_estudiante.dart';
-import 'data_table_carreras.dart';
-import 'estudiantes_page.dart';
+import 'route_carreras.dart';
+import 'route_estudiantes.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
-    create: (context) => EstudianteProvider(),
+    create: (context) => ProviderEstudiantes(),
     child: MaterialApp(
       theme: ThemeData(
         useMaterial3: true,
@@ -72,33 +72,11 @@ class _MainAppState extends State<MainApp> {
         ),
         body: TabBarView(
           children: [
-            EstudiantesPage(),
-            CarrerasPage(),
+            RouteEstudiantes(),
+            RouteCarreras(),
           ],
         ),
       ),
     );
   }
-}
-
-class CarrerasPage extends StatefulWidget {
-  const CarrerasPage({super.key});
-
-  @override
-  State<CarrerasPage> createState() => _CarrerasPageState();
-}
-
-class _CarrerasPageState extends State<CarrerasPage>
-    with AutomaticKeepAliveClientMixin<CarrerasPage> {
-  var valorInicial = 1;
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: DataTableCarreras()));
-  }
-
-  Widget getWidget() =>
-      valorInicial == 1 ? CircularProgressIndicator() : DataTableCarreras();
 }

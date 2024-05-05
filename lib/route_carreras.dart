@@ -1,8 +1,30 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
-
 import 'package:app_material_3/Carrera.dart';
 import 'package:app_material_3/service_carreras.dart';
 import 'package:flutter/material.dart';
+
+class RouteCarreras extends StatefulWidget {
+  const RouteCarreras({super.key});
+
+  @override
+  State<RouteCarreras> createState() => _RouteCarrerasState();
+}
+
+class _RouteCarrerasState extends State<RouteCarreras>
+    with AutomaticKeepAliveClientMixin<RouteCarreras> {
+  var valorInicial = 1;
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return const Scaffold(body: Center(child: DataTableCarreras()));
+  }
+
+  Widget getWidget() => valorInicial == 1
+      ? const CircularProgressIndicator()
+      : const DataTableCarreras();
+}
 
 class DataTableCarreras extends StatefulWidget {
   const DataTableCarreras({

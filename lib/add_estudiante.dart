@@ -1,4 +1,4 @@
-import 'package:app_material_3/estudiante_provider.dart';
+import 'package:app_material_3/provider_estudiantes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
@@ -13,9 +13,9 @@ class AddEstudiante extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<EstudianteProvider>(
+    return Consumer<ProviderEstudiantes>(
       builder:
-          (BuildContext context, EstudianteProvider provider, Widget? child) {
+          (BuildContext context, ProviderEstudiantes provider, Widget? child) {
         return AlertDialog(
           actionsPadding: const EdgeInsets.all(15),
           title: const TituloCreateCarrera(),
@@ -40,7 +40,7 @@ class ButtonAddEstudiante extends StatelessWidget {
     required this.provider,
   });
 
-  final EstudianteProvider provider;
+  final ProviderEstudiantes provider;
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +103,7 @@ class ContentDialog extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: TextFormField(
-            controller: Provider.of<EstudianteProvider>(context, listen: false)
+            controller: Provider.of<ProviderEstudiantes>(context, listen: false)
                 .nombreController,
             textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
@@ -114,7 +114,7 @@ class ContentDialog extends StatelessWidget {
           ),
         ),
         TextFormField(
-          controller: Provider.of<EstudianteProvider>(context, listen: false)
+          controller: Provider.of<ProviderEstudiantes>(context, listen: false)
               .edadController,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.number,

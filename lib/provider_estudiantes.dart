@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'estudiante.dart';
 
-class EstudianteProvider extends ChangeNotifier {
+class ProviderEstudiantes extends ChangeNotifier {
   final List<DataRow> _estudiantes = [
     DataRow(
         cells: [const DataCell(Text("Pikachu")), DataCell(Text(30.toString()))])
