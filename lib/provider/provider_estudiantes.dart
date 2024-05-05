@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'estudiante.dart';
+import '../model/estudiante.dart';
 
 class ProviderEstudiantes extends ChangeNotifier {
   final List<DataRow> _estudiantes = [

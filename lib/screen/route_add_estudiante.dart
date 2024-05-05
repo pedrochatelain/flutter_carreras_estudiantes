@@ -1,13 +1,13 @@
-import 'package:app_material_3/provider_estudiantes.dart';
+import 'package:app_material_3/provider/provider_estudiantes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
-import 'service_estudiante.dart';
+import '../service/service_estudiante.dart';
 
-class AddEstudiante extends StatelessWidget {
-  const AddEstudiante({
+class RouteAddEstudiante extends StatelessWidget {
+  const RouteAddEstudiante({
     super.key,
   });
 

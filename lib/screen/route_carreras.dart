@@ -1,6 +1,7 @@
 import 'package:app_material_3/Carrera.dart';
-import 'package:app_material_3/service_carreras.dart';
 import 'package:flutter/material.dart';
+
+import '../service/service_carreras.dart';
 
 class RouteCarreras extends StatefulWidget {
   const RouteCarreras({super.key});

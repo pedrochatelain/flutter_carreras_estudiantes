@@ -1,11 +1,12 @@
 // ignore_for_file: sort_child_properties_last, avoid_print, prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable, avoid_init_to_null, must_call_super
 
-import 'package:app_material_3/provider_estudiantes.dart';
+import 'package:app_material_3/provider/provider_estudiantes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'add_estudiante.dart';
-import 'route_carreras.dart';
-import 'route_estudiantes.dart';
+
+import 'screen/route_add_estudiante.dart';
+import 'screen/route_carreras.dart';
+import 'screen/route_estudiantes.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
@@ -49,7 +50,7 @@ class _MainAppState extends State<MainApp> {
                   var d = await showDialog<String>(
                     barrierDismissible: false,
                     context: context,
-                    builder: (BuildContext context) => AddEstudiante(),
+                    builder: (BuildContext context) => RouteAddEstudiante(),
                   );
                   if (d == "OK" || d == "Cancel" || d == null) {
                     toggleButtonAddCarrera();
