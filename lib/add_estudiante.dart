@@ -3,7 +3,10 @@
 import 'package:app_material_3/estudiante_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+
+import 'service_estudiante.dart';
 
 class AddEstudiante extends StatelessWidget {
   const AddEstudiante({
@@ -25,26 +28,63 @@ class AddEstudiante extends StatelessWidget {
               child: const Text(
                   style: TextStyle(color: Colors.deepOrange), 'Cancelar'),
             ),
-            FilledButton(
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStatePropertyAll(Colors.deepOrange[400])),
-              onPressed: () => {
-                if (!provider.hasEmptyFields())
-                  {
-                    provider.addEstudiante(provider.nombreController.text,
-                        int.parse(provider.edadController.text)),
-                    Navigator.pop(context, 'OK'),
-                    provider.clearText()
-                  }
-              },
-              child: const Text('Agregar'),
-            )
+            ButtonAddEstudiante(provider: provider)
           ],
         );
       },
     );
   }
+}
+
+class ButtonAddEstudiante extends StatelessWidget {
+  const ButtonAddEstudiante({
+    super.key,
+    required this.provider,
+  });
+
+  final EstudianteProvider provider;
+
+  @override
+  Widget build(BuildContext context) {
+    Response futureEstudiante;
+    var sm = ScaffoldMessenger.of(context);
+    return FilledButton(
+      style: ButtonStyle(
+          backgroundColor: MaterialStatePropertyAll(Colors.deepOrange[400])),
+      onPressed: () async => {
+        if (!provider.hasEmptyFields())
+          {
+            Navigator.pop(context, 'OK'),
+            futureEstudiante = await ServiceEstudiante().createEstudiante(
+                provider.nombreController.text,
+                int.parse(provider.edadController.text)),
+            if (futureEstudiante.statusCode == 201)
+              {
+                provider.addEstudiante(provider.nombreController.text,
+                    int.parse(provider.edadController.text)),
+                displaySnackbar(sm),
+                provider.clearText()
+              },
+          },
+      },
+      child: const Text('Agregar'),
+    );
+  }
+}
+
+void displaySnackbar(ScaffoldMessengerState sm) {
+  sm.showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      content: const Text('Estudiante agregado correctamente!'),
+      action: SnackBarAction(
+        label: 'Cerrar',
+        onPressed: () {
+          // Code to execute.
+        },
+      ),
+    ),
+  );
 }
 
 class ContentDialog extends StatelessWidget {

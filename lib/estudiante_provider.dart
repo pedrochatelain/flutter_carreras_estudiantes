@@ -1,3 +1,4 @@
+import 'package:app_material_3/service_estudiante.dart';
 import 'package:flutter/material.dart';
 
 class Estudiante {
@@ -29,6 +30,7 @@ class EstudianteProvider extends ChangeNotifier {
       DataCell(Text(est.nombre)),
       DataCell(Text(est.edad.toString()))
     ]));
+
     notifyListeners();
   }
 
