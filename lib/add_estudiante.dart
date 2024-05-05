@@ -1,5 +1,3 @@
-// ignore_for_file: sort_child_properties_last, avoid_print, prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable, avoid_init_to_null, must_call_super
-
 import 'package:app_material_3/estudiante_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,9 +17,9 @@ class AddEstudiante extends StatelessWidget {
       builder:
           (BuildContext context, EstudianteProvider provider, Widget? child) {
         return AlertDialog(
-          actionsPadding: EdgeInsets.all(15),
-          title: TituloCreateCarrera(),
-          content: ContentDialog(),
+          actionsPadding: const EdgeInsets.all(15),
+          title: const TituloCreateCarrera(),
+          content: const ContentDialog(),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'Cancel'),
@@ -75,13 +73,19 @@ class ButtonAddEstudiante extends StatelessWidget {
 void displaySnackbar(ScaffoldMessengerState sm) {
   sm.showSnackBar(
     SnackBar(
+      duration: const Duration(seconds: 2),
       behavior: SnackBarBehavior.floating,
-      content: const Text('Estudiante agregado correctamente!'),
-      action: SnackBarAction(
-        label: 'Cerrar',
-        onPressed: () {
-          // Code to execute.
-        },
+      content: Row(
+        children: <Widget>[
+          Icon(
+            size: 30,
+            Icons.check_circle_rounded,
+            color: Colors.green[400],
+          ),
+          Container(
+              margin: const EdgeInsets.only(left: 15),
+              child: const Text("Estudiante agregado correctamente")),
+        ],
       ),
     ),
   );
@@ -102,7 +106,7 @@ class ContentDialog extends StatelessWidget {
             controller: Provider.of<EstudianteProvider>(context, listen: false)
                 .nombreController,
             textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               isDense: true,
               border: OutlineInputBorder(),
               labelText: 'Nombre',
@@ -114,7 +118,7 @@ class ContentDialog extends StatelessWidget {
               .edadController,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.number,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             isDense: true,
             border: OutlineInputBorder(),
             labelText: 'Edad',
@@ -132,9 +136,9 @@ class TituloCreateCarrera extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return const Padding(
       padding: EdgeInsets.only(bottom: 10),
-      child: const Text('Add student'),
+      child: Text('Add student'),
     );
   }
 }
