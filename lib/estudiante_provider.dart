@@ -1,17 +1,6 @@
-import 'package:app_material_3/service_estudiante.dart';
 import 'package:flutter/material.dart';
 
-class Estudiante {
-  String nombre;
-  int edad;
-
-  Estudiante(this.nombre, this.edad);
-
-  @override
-  String toString() {
-    return "$nombre, $edad";
-  }
-}
+import 'estudiante.dart';
 
 class EstudianteProvider extends ChangeNotifier {
   final List<DataRow> _estudiantes = [
@@ -25,7 +14,7 @@ class EstudianteProvider extends ChangeNotifier {
   List<DataRow> get estudiantes => _estudiantes;
 
   void addEstudiante(String nombre, int edad) {
-    Estudiante est = Estudiante(nombre, edad);
+    Estudiante est = Estudiante(nombre: nombre, edad: edad);
     _estudiantes.add(DataRow(cells: [
       DataCell(Text(est.nombre)),
       DataCell(Text(est.edad.toString()))
