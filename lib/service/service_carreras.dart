@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:app_material_3/Carrera.dart';
+import 'package:app_material_3/model/carrera.dart';
 import 'package:http/http.dart' as http;
 
 class ServiceCarrera {
