@@ -2,23 +2,17 @@ import 'package:flutter/material.dart';
 import '../model/estudiante.dart';
 
 class ProviderEstudiantes extends ChangeNotifier {
-  final List<DataRow> _estudiantes = [
-    DataRow(
-        cells: [const DataCell(Text("Pikachu")), DataCell(Text(30.toString()))])
-  ];
-
+  late Future<List<Estudiante>> estudiantes;
   final nombreController = TextEditingController();
   final edadController = TextEditingController();
 
-  List<DataRow> get estudiantes => _estudiantes;
+  void setEstudiantes(Future<List<Estudiante>> ests) async {
+    estudiantes = ests;
+  }
 
   void addEstudiante(String nombre, int edad) {
     Estudiante est = Estudiante(nombre: nombre, edad: edad);
-    _estudiantes.add(DataRow(cells: [
-      DataCell(Text(est.nombre)),
-      DataCell(Text(est.edad.toString()))
-    ]));
-
+    estudiantes.then((lista) => lista.add(est));
     notifyListeners();
   }
 
@@ -29,5 +23,9 @@ class ProviderEstudiantes extends ChangeNotifier {
 
   bool hasEmptyFields() {
     return edadController.text == '' || nombreController.text == '';
+  }
+
+  Future<List<Estudiante>> getEstudiantes() {
+    return estudiantes;
   }
 }

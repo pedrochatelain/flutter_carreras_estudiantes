@@ -46,20 +46,22 @@ class ButtonAddEstudiante extends StatelessWidget {
   Widget build(BuildContext context) {
     Response futureEstudiante;
     var sm = ScaffoldMessenger.of(context);
+    String nombre;
+    int edad;
     return FilledButton(
       style: ButtonStyle(
           backgroundColor: MaterialStatePropertyAll(Colors.deepOrange[400])),
       onPressed: () async => {
         if (!provider.hasEmptyFields())
           {
+            nombre = provider.nombreController.text,
+            edad = int.parse(provider.edadController.text),
             Navigator.pop(context, 'OK'),
-            futureEstudiante = await ServiceEstudiante().createEstudiante(
-                provider.nombreController.text,
-                int.parse(provider.edadController.text)),
+            futureEstudiante =
+                await ServiceEstudiante().createEstudiante(nombre, edad),
             if (futureEstudiante.statusCode == 201)
               {
-                provider.addEstudiante(provider.nombreController.text,
-                    int.parse(provider.edadController.text)),
+                provider.addEstudiante(nombre, edad),
                 displaySnackbar(sm),
                 provider.clearText()
               },
