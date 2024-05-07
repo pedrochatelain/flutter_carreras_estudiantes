@@ -1,6 +1,7 @@
 import 'package:app_material_3/provider/provider_estudiantes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
@@ -54,6 +55,7 @@ class ButtonAddEstudiante extends StatelessWidget {
       onPressed: () async => {
         if (!provider.hasEmptyFields())
           {
+            displaySnackbarAgregandoEstudiante(sm),
             nombre = provider.nombreController.text,
             edad = int.parse(provider.edadController.text),
             Navigator.pop(context, 'OK'),
@@ -62,7 +64,8 @@ class ButtonAddEstudiante extends StatelessWidget {
             if (futureEstudiante.statusCode == 201)
               {
                 provider.addEstudiante(nombre, edad),
-                displaySnackbar(sm),
+                sm.clearSnackBars(),
+                displaySnackbarEstudianteAgregado(sm),
                 provider.clearText()
               },
           },
@@ -72,22 +75,44 @@ class ButtonAddEstudiante extends StatelessWidget {
   }
 }
 
-void displaySnackbar(ScaffoldMessengerState sm) {
+void displaySnackbarAgregandoEstudiante(ScaffoldMessengerState sm) {
   sm.showSnackBar(
     SnackBar(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 1),
       behavior: SnackBarBehavior.floating,
       content: Row(
         children: <Widget>[
-          Icon(
-            size: 30,
-            Icons.check_circle_rounded,
-            color: Colors.green[400],
-          ),
+          const Center(
+              child: SizedBox(
+                  height: 25, width: 25, child: CircularProgressIndicator())),
           Container(
               margin: const EdgeInsets.only(left: 15),
-              child: const Text("Estudiante agregado correctamente")),
+              child: const Text("Agregando estudiante...")),
         ],
+      ),
+    ),
+  );
+}
+
+void displaySnackbarEstudianteAgregado(ScaffoldMessengerState sm) {
+  sm.showSnackBar(
+    SnackBar(
+      duration: const Duration(seconds: 3),
+      behavior: SnackBarBehavior.floating,
+      content: Animate(
+        effects: const [SlideEffect(), FadeEffect()],
+        child: Row(
+          children: <Widget>[
+            Icon(
+              size: 30,
+              Icons.check_circle_rounded,
+              color: Colors.green[400],
+            ),
+            Container(
+                margin: const EdgeInsets.only(left: 15),
+                child: const Text("Estudiante agregado correctamente")),
+          ],
+        ),
       ),
     ),
   );
