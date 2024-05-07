@@ -2,6 +2,7 @@
 
 import 'package:app_material_3/provider/provider_estudiantes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 
 import 'screen/route_add_estudiante.dart';
@@ -33,31 +34,63 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
+    ValueNotifier<bool> isDialOpen = ValueNotifier(false);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        floatingActionButton: Container(
-          // width: 70,
-          // height: 70,
-          margin: EdgeInsets.all(5),
-          child: Visibility(
-            visible: showFAB,
-            child: FloatingActionButton(
-                child: Icon(size: 35, color: Colors.white, Icons.add),
-                backgroundColor: Colors.deepOrange,
-                onPressed: () async {
-                  toggleButtonAddCarrera();
-                  var d = await showDialog<String>(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (BuildContext context) => RouteAddEstudiante(),
-                  );
-                  if (d == "OK" || d == "Cancel" || d == null) {
+        floatingActionButton: SpeedDial(
+          openCloseDial: isDialOpen,
+          backgroundColor: Colors.deepOrange,
+          foregroundColor: Colors.white,
+          icon: Icons.more_horiz,
+          children: [
+            SpeedDialChild(
+              labelWidget: FilledButton(
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.deepOrange)),
+                  child: Row(
+                    children: [
+                      Icon(Icons.add),
+                      Text("Agregar estudiante"),
+                    ],
+                  ),
+                  onPressed: () async {
+                    setState(() => isDialOpen.value = false);
                     toggleButtonAddCarrera();
-                  }
-                }),
-          ),
+                    var d = await showDialog<String>(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) => RouteAddEstudiante(),
+                    );
+                    if (d == "OK" || d == "Cancel" || d == null) {
+                      toggleButtonAddCarrera();
+                    }
+                  }),
+            )
+          ],
         ),
+        // Container(
+        //   margin: EdgeInsets.all(5),
+        //   child: Visibility(
+        //     visible: showFAB,
+        // child: FloatingActionButton(
+        //     child: Icon(
+        //         size: 35, color: Colors.white, Icons.more_horiz_rounded),
+        //     backgroundColor: Colors.deepOrange,
+        //     onPressed: () async {
+        //       toggleButtonAddCarrera();
+        //       var d = await showDialog<String>(
+        //         barrierDismissible: false,
+        //         context: context,
+        //         builder: (BuildContext context) => RouteAddEstudiante(),
+        //       );
+        //       if (d == "OK" || d == "Cancel" || d == null) {
+        //         toggleButtonAddCarrera();
+        //       }
+        //     }),
+        //   ),
+        // ),
         appBar: AppBar(
           toolbarHeight: 10,
           backgroundColor: Colors.deepOrange,
