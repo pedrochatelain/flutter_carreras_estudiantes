@@ -1,24 +1,33 @@
-// ignore_for_file: sort_child_properties_last, avoid_print, prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable, avoid_init_to_null, must_call_super
-
 import 'package:app_material_3/provider/provider_estudiantes.dart';
+import 'package:app_material_3/screen/route_add_carrera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 
+import 'provider/provider_carreras.dart';
 import 'screen/route_add_estudiante.dart';
 import 'screen/route_carreras.dart';
 import 'screen/route_estudiantes.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => ProviderEstudiantes(),
-    child: MaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => ProviderEstudiantes(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProviderCarreras(),
+        )
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+          useMaterial3: true,
+        ),
+        home: const MainApp(),
       ),
-      home: MainApp(),
     ),
-  ));
+  );
 }
 
 class MainApp extends StatefulWidget {
@@ -30,71 +39,41 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   bool showFAB = true;
-  void toggleButtonAddCarrera() => setState(() => showFAB = !showFAB);
+  void closeDial() => setState(() => isDialOpen.value = false);
+  ValueNotifier<bool> isDialOpen = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
-    ValueNotifier<bool> isDialOpen = ValueNotifier(false);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         floatingActionButton: SpeedDial(
+          overlayOpacity: .54,
+          overlayColor: Colors.black54,
           openCloseDial: isDialOpen,
           backgroundColor: Colors.deepOrange,
           foregroundColor: Colors.white,
           icon: Icons.more_horiz,
           children: [
             SpeedDialChild(
-              labelWidget: FilledButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.deepOrange)),
-                  child: Row(
-                    children: [
-                      Icon(Icons.add),
-                      Text("Agregar estudiante"),
-                    ],
-                  ),
-                  onPressed: () async {
-                    setState(() => isDialOpen.value = false);
-                    toggleButtonAddCarrera();
-                    var d = await showDialog<String>(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (BuildContext context) => RouteAddEstudiante(),
-                    );
-                    if (d == "OK" || d == "Cancel" || d == null) {
-                      toggleButtonAddCarrera();
-                    }
-                  }),
+              labelWidget: ButtonAddEstudiante(closeDial),
+            ),
+            SpeedDialChild(
+              labelWidget: ButtonAddCarrera(closeDial),
             )
           ],
         ),
-        // Container(
-        //   margin: EdgeInsets.all(5),
-        //   child: Visibility(
-        //     visible: showFAB,
-        // child: FloatingActionButton(
-        //     child: Icon(
-        //         size: 35, color: Colors.white, Icons.more_horiz_rounded),
-        //     backgroundColor: Colors.deepOrange,
-        //     onPressed: () async {
-        //       toggleButtonAddCarrera();
-        //       var d = await showDialog<String>(
-        //         barrierDismissible: false,
-        //         context: context,
-        //         builder: (BuildContext context) => RouteAddEstudiante(),
-        //       );
-        //       if (d == "OK" || d == "Cancel" || d == null) {
-        //         toggleButtonAddCarrera();
-        //       }
-        //     }),
-        //   ),
-        // ),
         appBar: AppBar(
-          toolbarHeight: 10,
+          // systemOverlayStyle: SystemUiOverlayStyle(
+          //   statusBarColor: Colors.deepOrange, // Status bar
+          //   systemNavigationBarColor: Colors.white, // Navigation bar
+          //   systemNavigationBarIconBrightness:
+          //       Brightness.dark, // Change Icon color
+          // ),
+          toolbarHeight: 3,
           backgroundColor: Colors.deepOrange,
-          bottom: TabBar(
+          bottom: const TabBar(
+            indicatorPadding: EdgeInsets.all(4),
             labelColor: Colors.white,
             unselectedLabelColor: Colors.black54,
             indicatorColor: Colors.white,
@@ -104,7 +83,7 @@ class _MainAppState extends State<MainApp> {
             ],
           ),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
             RouteEstudiantes(),
             RouteCarreras(),
@@ -112,5 +91,73 @@ class _MainAppState extends State<MainApp> {
         ),
       ),
     );
+  }
+}
+
+class ButtonAddCarrera extends StatelessWidget {
+  final void Function() closeDial;
+
+  const ButtonAddCarrera(
+    this.closeDial, {
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FilledButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.deepOrange)),
+        child: const Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: Icon(size: 22, Icons.addchart),
+            ),
+            Text("Agregar carrera"),
+          ],
+        ),
+        onPressed: () {
+          closeDial();
+          showDialog(
+            barrierColor: Colors.black54,
+            barrierDismissible: true,
+            context: context,
+            builder: (BuildContext context) => const RouteAddCarrera(),
+          );
+        });
+  }
+}
+
+class ButtonAddEstudiante extends StatelessWidget {
+  final void Function() closeDial;
+
+  const ButtonAddEstudiante(
+    this.closeDial, {
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FilledButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.deepOrange)),
+        child: const Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: Icon(size: 22, Icons.person_add_alt_1_rounded),
+            ),
+            Text("Agregar estudiante"),
+          ],
+        ),
+        onPressed: () {
+          closeDial();
+          showDialog(
+            barrierColor: Colors.black54,
+            barrierDismissible: true,
+            context: context,
+            builder: (BuildContext context) => const RouteAddEstudiante(),
+          );
+        });
   }
 }

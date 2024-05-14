@@ -1,16 +1,29 @@
 class Carrera {
-  final int inscriptos;
-  final String carrera;
+  int? inscriptos;
+  String carrera;
 
-  const Carrera({
+  Carrera({
     required this.carrera,
-    required this.inscriptos,
+    this.inscriptos,
   });
+
+  Carrera.withoutInscriptos(this.carrera) {
+    inscriptos = 0;
+  }
 
   factory Carrera.fromJson(Map<String, dynamic> json) {
     return Carrera(
       carrera: json['carrera'],
       inscriptos: json['inscriptos'],
     );
+  }
+
+  @override
+  String toString() {
+    return carrera;
+  }
+
+  toJson() {
+    return <String, String>{'nombre': carrera};
   }
 }

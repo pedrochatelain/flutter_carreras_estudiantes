@@ -1,6 +1,9 @@
 import 'package:app_material_3/model/carrera.dart';
+import 'package:app_material_3/provider/provider_carreras.dart';
+import 'package:app_material_3/service/service_carreras.dart';
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
-import '../service/service_carreras.dart';
+import 'package:provider/provider.dart';
 
 class RouteCarreras extends StatefulWidget {
   const RouteCarreras({super.key});
@@ -42,49 +45,27 @@ class _DataTableCarrerasState extends State<DataTableCarreras> {
   void initState() {
     super.initState();
     carreras = ServiceCarrera().getCarreras();
+    Provider.of<ProviderCarreras>(listen: false, context).setCarreras(carreras);
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Carrera>>(
-      future: carreras,
+      future:
+          Provider.of<ProviderCarreras>(listen: true, context).getCarreras(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          var carreras = snapshot.data;
-          return SingleChildScrollView(
-            child: DataTable(
-              columns: const <DataColumn>[
-                DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      'Carrera',
-                    ),
-                  ),
-                ),
-                DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      'Inscriptos',
-                    ),
-                  ),
-                ),
-                DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      '',
-                    ),
-                  ),
-                ),
-              ],
-              rows: List.generate(
-                carreras!.length,
-                (index) => _resultsAPI(
-                  index,
-                  carreras[index],
-                ),
+          return DataTable2(
+              fixedTopRows: 1,
+              headingRowDecoration: const BoxDecoration(
+                border: Border(bottom: BorderSide(width: .2)),
               ),
-            ),
-          );
+              dividerThickness: .1,
+              columns: const [
+                DataColumn2(label: Text("Carrera")),
+                DataColumn2(label: Text("Inscriptos"))
+              ],
+              rows: carrerasToDataRow(snapshot.data));
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
@@ -94,22 +75,15 @@ class _DataTableCarrerasState extends State<DataTableCarreras> {
       },
     );
   }
-}
 
-DataRow _resultsAPI(index, data) {
-  return DataRow(
-    cells: <DataCell>[
-      DataCell(
-        Text(
-          data.carrera,
-        ),
-      ),
-      DataCell(
-        Text(
-          data.inscriptos.toString(),
-        ),
-      ),
-      DataCell.empty
-    ],
-  );
+  List<DataRow> carrerasToDataRow(List<Carrera>? data) {
+    List<DataRow> lista = [];
+    for (var carrera in data!) {
+      lista.add(DataRow(cells: [
+        DataCell(Text(carrera.carrera)),
+        DataCell(Text(carrera.inscriptos.toString()))
+      ]));
+    }
+    return lista;
+  }
 }

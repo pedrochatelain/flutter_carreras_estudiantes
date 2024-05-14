@@ -1,7 +1,7 @@
 import 'package:app_material_3/provider/provider_estudiantes.dart';
+import 'package:app_material_3/shared/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
@@ -18,8 +18,7 @@ class RouteAddEstudiante extends StatelessWidget {
       builder:
           (BuildContext context, ProviderEstudiantes provider, Widget? child) {
         return AlertDialog(
-          actionsPadding: const EdgeInsets.all(15),
-          title: const TituloCreateCarrera(),
+          title: const Text('Add student'),
           content: const ContentDialog(),
           actions: <Widget>[
             TextButton(
@@ -55,7 +54,7 @@ class ButtonAddEstudiante extends StatelessWidget {
       onPressed: () async => {
         if (!provider.hasEmptyFields())
           {
-            displaySnackbarAgregandoEstudiante(sm),
+            displayLoadingSnackbar(sm, "Agregando estudiante..."),
             nombre = provider.nombreController.text,
             edad = int.parse(provider.edadController.text),
             Navigator.pop(context, 'OK'),
@@ -65,7 +64,8 @@ class ButtonAddEstudiante extends StatelessWidget {
               {
                 provider.addEstudiante(nombre, edad),
                 sm.clearSnackBars(),
-                displaySnackbarEstudianteAgregado(sm),
+                displaySuccessSnackbar(
+                    sm, "Estudiante agregado correctamente!"),
                 provider.clearText()
               },
           },
@@ -75,49 +75,6 @@ class ButtonAddEstudiante extends StatelessWidget {
   }
 }
 
-void displaySnackbarAgregandoEstudiante(ScaffoldMessengerState sm) {
-  sm.showSnackBar(
-    SnackBar(
-      duration: const Duration(seconds: 1),
-      behavior: SnackBarBehavior.floating,
-      content: Row(
-        children: <Widget>[
-          const Center(
-              child: SizedBox(
-                  height: 25, width: 25, child: CircularProgressIndicator())),
-          Container(
-              margin: const EdgeInsets.only(left: 15),
-              child: const Text("Agregando estudiante...")),
-        ],
-      ),
-    ),
-  );
-}
-
-void displaySnackbarEstudianteAgregado(ScaffoldMessengerState sm) {
-  sm.showSnackBar(
-    SnackBar(
-      duration: const Duration(seconds: 3),
-      behavior: SnackBarBehavior.floating,
-      content: Animate(
-        effects: const [SlideEffect(), FadeEffect()],
-        child: Row(
-          children: <Widget>[
-            Icon(
-              size: 30,
-              Icons.check_circle_rounded,
-              color: Colors.green[400],
-            ),
-            Container(
-                margin: const EdgeInsets.only(left: 15),
-                child: const Text("Estudiante agregado correctamente")),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
 class ContentDialog extends StatelessWidget {
   const ContentDialog({
     super.key,
@@ -125,21 +82,20 @@ class ContentDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: TextFormField(
-            controller: Provider.of<ProviderEstudiantes>(context, listen: false)
-                .nombreController,
-            textInputAction: TextInputAction.next,
-            decoration: const InputDecoration(
-              isDense: true,
-              border: OutlineInputBorder(),
-              labelText: 'Nombre',
-            ),
+        TextFormField(
+          controller: Provider.of<ProviderEstudiantes>(context, listen: false)
+              .nombreController,
+          textInputAction: TextInputAction.next,
+          decoration: const InputDecoration(
+            isDense: true,
+            border: OutlineInputBorder(),
+            labelText: 'Nombre',
           ),
         ),
+        const SizedBox(height: 10),
         TextFormField(
           controller: Provider.of<ProviderEstudiantes>(context, listen: false)
               .edadController,
@@ -152,20 +108,6 @@ class ContentDialog extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class TituloCreateCarrera extends StatelessWidget {
-  const TituloCreateCarrera({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(bottom: 10),
-      child: Text('Add student'),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:app_material_3/model/estudiante.dart';
 import 'package:app_material_3/provider/provider_estudiantes.dart';
 import 'package:app_material_3/service/service_estudiante.dart';
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,11 +32,18 @@ class RouteEstudiantesState extends State<RouteEstudiantes>
           Provider.of<ProviderEstudiantes>(listen: true, context).estudiantes,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return SingleChildScrollView(
-              child: DataTable(columns: const [
-            DataColumn(label: Text("Nombre")),
-            DataColumn(label: Text("Edad"))
-          ], rows: createRows(snapshot.data!)));
+          return DataTable2(
+              isVerticalScrollBarVisible: false,
+              fixedTopRows: 1,
+              headingRowDecoration: const BoxDecoration(
+                border: Border(bottom: BorderSide(width: .2)),
+              ),
+              dividerThickness: .1,
+              columns: const [
+                DataColumn2(label: Text("Nombre")),
+                DataColumn2(label: Text("Edad"))
+              ],
+              rows: createRows(snapshot.data!));
         }
         return const Center(child: CircularProgressIndicator());
       },

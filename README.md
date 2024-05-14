@@ -4,5 +4,5 @@ A new Flutter project.
 
 # TODO
 
-- Avoid multiple taps on add student button (it causes dialog to open many times)
-- 
+- Extract tables into a single Widget to avoid repetition
+- Implement provider_carreras

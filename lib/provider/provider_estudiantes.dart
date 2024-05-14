@@ -24,8 +24,4 @@ class ProviderEstudiantes extends ChangeNotifier {
   bool hasEmptyFields() {
     return edadController.text == '' || nombreController.text == '';
   }
-
-  Future<List<Estudiante>> getEstudiantes() {
-    return estudiantes;
-  }
 }
