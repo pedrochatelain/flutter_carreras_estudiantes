@@ -5,18 +5,29 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RouteEstudiantes extends StatefulWidget {
+class RouteEstudiantes extends StatelessWidget {
   const RouteEstudiantes({super.key});
 
   @override
-  RouteEstudiantesState createState() => RouteEstudiantesState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+            title: const Text(
+                style: TextStyle(
+                    color: Colors.deepOrange, fontWeight: FontWeight.bold),
+                "Estudiantes")),
+        body: const Center(child: DataTableEstudiantes()));
+  }
 }
 
-class RouteEstudiantesState extends State<RouteEstudiantes>
-    with AutomaticKeepAliveClientMixin<RouteEstudiantes> {
-  @override
-  bool get wantKeepAlive => true;
+class DataTableEstudiantes extends StatefulWidget {
+  const DataTableEstudiantes({super.key});
 
+  @override
+  State<StatefulWidget> createState() => DataTableEstudiantesState();
+}
+
+class DataTableEstudiantesState extends State<DataTableEstudiantes> {
   @override
   void initState() {
     super.initState();
@@ -26,7 +37,6 @@ class RouteEstudiantesState extends State<RouteEstudiantes>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return FutureBuilder<List<Estudiante>>(
       future:
           Provider.of<ProviderEstudiantes>(listen: true, context).estudiantes,

@@ -22,6 +22,11 @@ void main() {
       ],
       child: MaterialApp(
         theme: ThemeData(
+          navigationBarTheme: const NavigationBarThemeData(
+              iconTheme:
+                  MaterialStatePropertyAll(IconThemeData(color: Colors.white)),
+              labelTextStyle:
+                  MaterialStatePropertyAll(TextStyle(color: Colors.white))),
           useMaterial3: true,
         ),
         home: const MainApp(),
@@ -39,57 +44,57 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   bool showFAB = true;
+  late List<Widget> _children;
+
+  @override
+  void initState() {
+    super.initState();
+    _children = [const RouteEstudiantes(), const RouteCarreras()];
+  }
+
+  int currentPageIndex = 0;
   void closeDial() => setState(() => isDialOpen.value = false);
   ValueNotifier<bool> isDialOpen = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        floatingActionButton: SpeedDial(
-          overlayOpacity: .54,
-          overlayColor: Colors.black54,
-          openCloseDial: isDialOpen,
-          backgroundColor: Colors.deepOrange,
-          foregroundColor: Colors.white,
-          icon: Icons.more_horiz,
-          children: [
-            SpeedDialChild(
-              labelWidget: ButtonAddEstudiante(closeDial),
-            ),
-            SpeedDialChild(
-              labelWidget: ButtonAddCarrera(closeDial),
-            )
-          ],
-        ),
-        appBar: AppBar(
-          // systemOverlayStyle: SystemUiOverlayStyle(
-          //   statusBarColor: Colors.deepOrange, // Status bar
-          //   systemNavigationBarColor: Colors.white, // Navigation bar
-          //   systemNavigationBarIconBrightness:
-          //       Brightness.dark, // Change Icon color
-          // ),
-          toolbarHeight: 3,
-          backgroundColor: Colors.deepOrange,
-          bottom: const TabBar(
-            indicatorPadding: EdgeInsets.all(4),
-            labelColor: Colors.white,
-            unselectedLabelColor: Colors.black54,
-            indicatorColor: Colors.white,
-            tabs: [
-              Tab(text: 'ESTUDIANTES', icon: Icon(Icons.school_rounded)),
-              Tab(text: 'CARRERAS', icon: Icon(Icons.history_edu_rounded)),
-            ],
+    return Scaffold(
+      floatingActionButton: SpeedDial(
+        overlayOpacity: .54,
+        overlayColor: Colors.black54,
+        openCloseDial: isDialOpen,
+        backgroundColor: Colors.deepOrange,
+        foregroundColor: Colors.white,
+        icon: Icons.more_horiz,
+        children: [
+          SpeedDialChild(
+            labelWidget: ButtonAddEstudiante(closeDial),
           ),
-        ),
-        body: const TabBarView(
-          children: [
-            RouteEstudiantes(),
-            RouteCarreras(),
-          ],
-        ),
+          SpeedDialChild(
+            labelWidget: ButtonAddCarrera(closeDial),
+          )
+        ],
       ),
+      bottomNavigationBar: NavigationBar(
+          backgroundColor: Colors.deepOrange,
+          onDestinationSelected: (int index) {
+            setState(() => currentPageIndex = index);
+          },
+          indicatorColor: Colors.deepOrange[800],
+          selectedIndex: currentPageIndex,
+          destinations: const [
+            NavigationDestination(
+              selectedIcon: Icon(Icons.person_2),
+              icon: Icon(Icons.person_2_outlined),
+              label: 'Estudiantes',
+            ),
+            NavigationDestination(
+              selectedIcon: Icon(Icons.view_list),
+              icon: Icon(Icons.view_list_outlined),
+              label: 'Carreras',
+            )
+          ]),
+      body: IndexedStack(index: currentPageIndex, children: _children),
     );
   }
 }
