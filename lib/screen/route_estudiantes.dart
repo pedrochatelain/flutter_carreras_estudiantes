@@ -1,9 +1,11 @@
 import 'package:app_material_3/model/estudiante.dart';
 import 'package:app_material_3/provider/provider_estudiantes.dart';
 import 'package:app_material_3/service/service_estudiante.dart';
-import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+
+import 'route_detail_estudiante.dart';
 
 class RouteEstudiantes extends StatelessWidget {
   const RouteEstudiantes({super.key});
@@ -12,11 +14,12 @@ class RouteEstudiantes extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+            scrolledUnderElevation: 0,
             title: const Text(
                 style: TextStyle(
                     color: Colors.deepOrange, fontWeight: FontWeight.bold),
                 "Estudiantes")),
-        body: const Center(child: DataTableEstudiantes()));
+        body: const DataTableEstudiantes());
   }
 }
 
@@ -42,34 +45,37 @@ class DataTableEstudiantesState extends State<DataTableEstudiantes> {
           Provider.of<ProviderEstudiantes>(listen: true, context).estudiantes,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return DataTable2(
-              isVerticalScrollBarVisible: false,
-              fixedTopRows: 1,
-              headingRowDecoration: const BoxDecoration(
-                border: Border(bottom: BorderSide(width: .2)),
-              ),
-              dividerThickness: .1,
-              columns: const [
-                DataColumn2(label: Text("Nombre")),
-                DataColumn2(label: Text("Edad"))
-              ],
-              rows: createRows(snapshot.data!));
+          var estudiantes = snapshot.data;
+          return ListView.separated(
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(
+                    // height: 3,
+                    thickness: .2,
+                    indent: 10,
+                    endIndent: 10,
+                  ),
+              itemCount: estudiantes!.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  enabled: true,
+                  onTap: () => {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                          // duration: Duration(seconds: 2),
+                          child: RouteDetailEstudiante(estudiantes[index]),
+                          type: PageTransitionType.rightToLeft,
+                        ))
+                  },
+                  title: Text(estudiantes[index].nombre.toString()),
+                  subtitle: Text("${estudiantes[index].edad} años"),
+                  leading: Icon(color: Colors.deepOrange[300], Icons.person),
+                  trailing: const Icon(size: 20, Icons.arrow_right),
+                );
+              });
         }
         return const Center(child: CircularProgressIndicator());
       },
     );
-  }
-
-  List<DataRow> createRows(List<Estudiante> data) {
-    List<DataRow> rows = [];
-
-    for (Estudiante est in data) {
-      rows.add(DataRow(cells: [
-        DataCell(Text(est.nombre)),
-        DataCell(Text(est.edad.toString()))
-      ]));
-    }
-
-    return rows;
   }
 }

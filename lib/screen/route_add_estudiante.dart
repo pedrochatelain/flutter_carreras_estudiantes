@@ -50,7 +50,7 @@ class ButtonAddEstudiante extends StatelessWidget {
     int edad;
     return FilledButton(
       style: ButtonStyle(
-          backgroundColor: MaterialStatePropertyAll(Colors.deepOrange[400])),
+          backgroundColor: WidgetStatePropertyAll(Colors.deepOrange[400])),
       onPressed: () async => {
         if (!provider.hasEmptyFields())
           {

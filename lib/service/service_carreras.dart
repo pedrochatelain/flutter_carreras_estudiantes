@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 
 class ServiceCarrera {
   Future<List<Carrera>> getCarreras() async {
-    print("entraste a service: getCarreras()");
     final response = await http.get(Uri.parse(
         'https://carrest.onrender.com/api/carreras?sort=cantidad-inscriptos'));
     if (response.statusCode == 200) {

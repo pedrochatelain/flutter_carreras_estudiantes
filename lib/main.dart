@@ -24,9 +24,9 @@ void main() {
         theme: ThemeData(
           navigationBarTheme: const NavigationBarThemeData(
               iconTheme:
-                  MaterialStatePropertyAll(IconThemeData(color: Colors.white)),
+                  WidgetStatePropertyAll(IconThemeData(color: Colors.white)),
               labelTextStyle:
-                  MaterialStatePropertyAll(TextStyle(color: Colors.white))),
+                  WidgetStatePropertyAll(TextStyle(color: Colors.white))),
           useMaterial3: true,
         ),
         home: const MainApp(),
@@ -60,12 +60,14 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: SpeedDial(
+        onClose: () => setState(() => isDialOpen.value = false),
+        onPress: () => setState(() => isDialOpen.value = true),
         overlayOpacity: .54,
         overlayColor: Colors.black54,
         openCloseDial: isDialOpen,
         backgroundColor: Colors.deepOrange,
         foregroundColor: Colors.white,
-        icon: Icons.more_horiz,
+        icon: isDialOpen.value == false ? Icons.add : Icons.close,
         children: [
           SpeedDialChild(
             labelWidget: ButtonAddEstudiante(closeDial),
@@ -111,7 +113,7 @@ class ButtonAddCarrera extends StatelessWidget {
   Widget build(BuildContext context) {
     return FilledButton(
         style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.deepOrange)),
+            backgroundColor: WidgetStateProperty.all(Colors.deepOrange)),
         child: const Row(
           children: [
             Padding(
@@ -145,7 +147,7 @@ class ButtonAddEstudiante extends StatelessWidget {
   Widget build(BuildContext context) {
     return FilledButton(
         style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.deepOrange)),
+            backgroundColor: WidgetStateProperty.all(Colors.deepOrange)),
         child: const Row(
           children: [
             Padding(

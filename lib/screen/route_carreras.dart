@@ -14,11 +14,12 @@ class RouteCarreras extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+            scrolledUnderElevation: 0,
             title: const Text(
                 style: TextStyle(
                     color: Colors.deepOrange, fontWeight: FontWeight.bold),
                 "Carreras")),
-        body: const Center(child: DataTableCarreras()));
+        body: const DataTableCarreras());
   }
 }
 
