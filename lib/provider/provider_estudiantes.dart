@@ -11,8 +11,8 @@ class ProviderEstudiantes extends ChangeNotifier {
     estudiantes = ests;
   }
 
-  void addEstudiante(String nombre, int edad) {
-    Estudiante est = Estudiante(nombre: nombre, edad: edad);
+  void addEstudiante(String nombre, String apellido, int edad) {
+    Estudiante est = Estudiante(nombre: nombre, apellido: apellido, edad: edad);
     estudiantes.then((lista) => lista.add(est));
     notifyListeners();
   }

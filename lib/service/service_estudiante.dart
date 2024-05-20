@@ -6,16 +6,21 @@ import '../model/random_user.dart';
 
 class ServiceEstudiante {
   final String uriEstudiantes = 'https://carrest.onrender.com/api/estudiantes';
-  String uriRandomUsers = 'https://randomuser.me/api/?inc=name';
+  String uriRandomUsers =
+      'https://randomuser.me/api/?inc=name&nat=es,us,dk,fr,gb';
 
-  Future<http.Response> createEstudiante(String nombre, int edad) async {
+  Future<http.Response> createEstudiante(
+      String nombre, String apellido, int edad) async {
     return await http.post(
       Uri.parse(uriEstudiantes),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(
-          <String, String>{'nombre': nombre, 'edad': edad.toString()}),
+      body: jsonEncode(<String, String>{
+        'nombre': nombre,
+        'apellido': apellido,
+        'edad': edad.toString()
+      }),
     );
   }
 

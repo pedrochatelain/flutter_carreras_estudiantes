@@ -56,6 +56,8 @@ class DataTableEstudiantesState extends State<DataTableEstudiantes> {
                   ),
               itemCount: estudiantes!.length,
               itemBuilder: (context, index) {
+                var nombre = estudiantes[index].nombre.toString();
+                var apellido = estudiantes[index].apellido.toString();
                 return ListTile(
                   contentPadding: const EdgeInsets.all(12),
                   enabled: true,
@@ -68,12 +70,14 @@ class DataTableEstudiantesState extends State<DataTableEstudiantes> {
                           type: PageTransitionType.rightToLeft,
                         ))
                   },
-                  title: Text(estudiantes[index].nombre.toString()),
+                  title: Text("$nombre $apellido"),
                   subtitle: Text("${estudiantes[index].edad} años"),
                   leading: Icon(color: Colors.deepOrange[300], Icons.person),
                   trailing: const Icon(size: 20, Icons.arrow_right),
                 );
               });
+        } else if (snapshot.hasError) {
+          return Text(snapshot.error.toString());
         }
         return const Center(child: CircularProgressIndicator());
       },
