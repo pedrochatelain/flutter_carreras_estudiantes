@@ -1,3 +1,4 @@
+import 'package:google_fonts/google_fonts.dart';
 import 'package:app_material_3/provider/provider_estudiantes.dart';
 import 'package:app_material_3/screen/route_add_carrera.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'screen/route_carreras.dart';
 import 'screen/route_estudiantes.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MultiProvider(
       providers: [
@@ -22,6 +24,7 @@ void main() {
       ],
       child: MaterialApp(
         theme: ThemeData(
+          textTheme: GoogleFonts.mcLarenTextTheme(),
           navigationBarTheme: const NavigationBarThemeData(
               iconTheme:
                   WidgetStatePropertyAll(IconThemeData(color: Colors.white)),

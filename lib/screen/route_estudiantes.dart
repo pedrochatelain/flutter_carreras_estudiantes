@@ -49,7 +49,7 @@ class DataTableEstudiantesState extends State<DataTableEstudiantes> {
           return ListView.separated(
               separatorBuilder: (BuildContext context, int index) =>
                   const Divider(
-                    // height: 3,
+                    height: 0,
                     thickness: .2,
                     indent: 10,
                     endIndent: 10,
@@ -57,6 +57,7 @@ class DataTableEstudiantesState extends State<DataTableEstudiantes> {
               itemCount: estudiantes!.length,
               itemBuilder: (context, index) {
                 return ListTile(
+                  contentPadding: const EdgeInsets.all(12),
                   enabled: true,
                   onTap: () => {
                     Navigator.push(

@@ -1,3 +1,4 @@
+import 'package:app_material_3/model/random_user.dart';
 import 'package:app_material_3/provider/provider_estudiantes.dart';
 import 'package:app_material_3/shared/snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -85,29 +86,73 @@ class ContentDialog extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        TextFormField(
-          controller: Provider.of<ProviderEstudiantes>(context, listen: false)
-              .nombreController,
-          textInputAction: TextInputAction.next,
-          decoration: const InputDecoration(
-            isDense: true,
-            border: OutlineInputBorder(),
-            labelText: 'Nombre',
-          ),
-        ),
-        const SizedBox(height: 10),
+        FieldDropdown(
+            3,
+            (RandomUser user) => user.nombre,
+            "Nombre",
+            Provider.of<ProviderEstudiantes>(context, listen: false)
+                .nombreController),
+        const SizedBox(height: 20),
+        FieldDropdown(
+            4,
+            (RandomUser user) => user.apellido,
+            "Apellido",
+            Provider.of<ProviderEstudiantes>(context, listen: false)
+                .apellidoController),
+        const SizedBox(height: 20),
         TextFormField(
           controller: Provider.of<ProviderEstudiantes>(context, listen: false)
               .edadController,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.number,
           decoration: const InputDecoration(
-            isDense: true,
             border: OutlineInputBorder(),
             labelText: 'Edad',
           ),
         ),
       ],
+    );
+  }
+}
+
+class FieldDropdown extends StatelessWidget {
+  final int _numberOfEntries;
+  final Function _getField;
+  final String _hintText;
+  final TextEditingController _controller;
+  final double _width = 230;
+
+  const FieldDropdown(
+    this._numberOfEntries,
+    this._getField,
+    this._hintText,
+    this._controller, {
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: ServiceEstudiante().getRandomUsers(_numberOfEntries),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          var users = snapshot.data!;
+          return DropdownMenu(
+              controller: _controller,
+              hintText: _hintText,
+              width: _width,
+              dropdownMenuEntries: List.generate(
+                users.length,
+                (index) => DropdownMenuEntry(
+                    value: index, label: _getField(users[index])),
+              ));
+        }
+        return DropdownMenu(
+            hintText: "Cargando...",
+            width: _width,
+            enabled: false,
+            dropdownMenuEntries: List.empty());
+      },
     );
   }
 }
