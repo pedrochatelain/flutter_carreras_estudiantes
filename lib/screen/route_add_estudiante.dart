@@ -20,7 +20,7 @@ class RouteAddEstudiante extends StatelessWidget {
           (BuildContext context, ProviderEstudiantes provider, Widget? child) {
         return AlertDialog(
           title: const Text('Add student'),
-          content: const ContentDialog(),
+          content: ContentDialog(provider: provider),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'Cancel'),
@@ -80,11 +80,19 @@ class ButtonAddEstudiante extends StatelessWidget {
   }
 }
 
-class ContentDialog extends StatelessWidget {
+class ContentDialog extends StatefulWidget {
+  final ProviderEstudiantes provider;
+
   const ContentDialog({
     super.key,
+    required this.provider,
   });
 
+  @override
+  State<ContentDialog> createState() => _ContentDialogState();
+}
+
+class _ContentDialogState extends State<ContentDialog> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -104,17 +112,51 @@ class ContentDialog extends StatelessWidget {
             Provider.of<ProviderEstudiantes>(context, listen: false)
                 .apellidoController),
         const SizedBox(height: 20),
-        TextFormField(
-          controller: Provider.of<ProviderEstudiantes>(context, listen: false)
-              .edadController,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: 'Edad',
-          ),
-        ),
+        const EdadTextField(),
       ],
+    );
+  }
+}
+
+class EdadTextField extends StatefulWidget {
+  const EdadTextField({
+    super.key,
+  });
+
+  @override
+  State<EdadTextField> createState() => _EdadTextFieldState();
+}
+
+class _EdadTextFieldState extends State<EdadTextField> {
+  @override
+  Widget build(BuildContext context) {
+    var edadController =
+        Provider.of<ProviderEstudiantes>(context, listen: false).edadController;
+    bool isEdadEmpty = edadController.text.isEmpty;
+    return TextFormField(
+      onChanged: (value) => setState(() {
+        value.isNotEmpty ? isEdadEmpty = false : isEdadEmpty = true;
+      }),
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: (value) {
+        if (value != '') {
+          return (int.parse(value!) > 150) ? 'That old? 😂' : null;
+        }
+        return null;
+      },
+      controller: edadController,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+        suffixIcon: !isEdadEmpty
+            ? IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: () => setState(() => edadController.text = ""),
+              )
+            : null,
+        border: const OutlineInputBorder(),
+        labelText: 'Edad',
+      ),
     );
   }
 }

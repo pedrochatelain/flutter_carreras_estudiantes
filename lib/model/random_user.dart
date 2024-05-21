@@ -16,6 +16,6 @@ class RandomUser {
 
   @override
   String toString() {
-    return "nombre: ${nombre}, apellido: ${apellido}";
+    return "nombre: $nombre, apellido: $apellido";
   }
 }

@@ -1,11 +1,10 @@
 import 'package:app_material_3/model/estudiante.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class RouteDetailEstudiante extends StatelessWidget {
   Estudiante estudiante;
 
-  TextStyle estiloDetail = TextStyle(fontSize: 30);
+  TextStyle estiloDetail = const TextStyle(fontSize: 30);
 
   RouteDetailEstudiante(this.estudiante, {super.key});
 
@@ -17,7 +16,7 @@ class RouteDetailEstudiante extends StatelessWidget {
           ),
       body: Center(
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               color: Colors.blue,
               borderRadius: BorderRadius.all(Radius.circular(234))),
           child: Padding(
