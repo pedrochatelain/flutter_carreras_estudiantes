@@ -24,6 +24,29 @@ void displaySuccessSnackbar(ScaffoldMessengerState sm, String message) {
   );
 }
 
+void displayErrorSnackbar(ScaffoldMessengerState sm, String message) {
+  sm.showSnackBar(
+    SnackBar(
+      duration: const Duration(seconds: 4),
+      behavior: SnackBarBehavior.floating,
+      content: Animate(
+        effects: const [SlideEffect(), FadeEffect()],
+        child: Row(
+          children: <Widget>[
+            const Icon(
+              size: 30,
+              Icons.error_rounded,
+              color: Colors.red,
+            ),
+            Container(
+                margin: const EdgeInsets.only(left: 15), child: Text(message)),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
 void displayLoadingSnackbar(ScaffoldMessengerState sm, String message) {
   sm.showSnackBar(
     SnackBar(

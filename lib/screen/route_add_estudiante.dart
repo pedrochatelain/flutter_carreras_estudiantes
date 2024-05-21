@@ -45,7 +45,7 @@ class ButtonAddEstudiante extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Response futureEstudiante;
+    Response creationEstudiante;
     var sm = ScaffoldMessenger.of(context);
     String nombre;
     String apellido;
@@ -61,16 +61,18 @@ class ButtonAddEstudiante extends StatelessWidget {
             apellido = provider.apellidoController.text,
             edad = int.parse(provider.edadController.text),
             Navigator.pop(context, 'OK'),
-            futureEstudiante = await ServiceEstudiante()
+            creationEstudiante = await ServiceEstudiante()
                 .createEstudiante(nombre, apellido, edad),
-            if (futureEstudiante.statusCode == 201)
+            if (creationEstudiante.statusCode == 201)
               {
                 provider.addEstudiante(nombre, apellido, edad),
                 sm.clearSnackBars(),
                 displaySuccessSnackbar(
                     sm, "Estudiante agregado correctamente!"),
                 provider.clearText()
-              },
+              }
+            else
+              {displayErrorSnackbar(sm, "No se pudo agregar el estudiante")}
           },
       },
       child: const Text('Agregar'),
