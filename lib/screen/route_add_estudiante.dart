@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_material_3/model/random_user.dart';
 import 'package:app_material_3/provider/provider_estudiantes.dart';
 import 'package:app_material_3/shared/snack_bar.dart';
@@ -61,11 +63,10 @@ class ButtonAddEstudiante extends StatelessWidget {
             apellido = provider.apellidoController.text,
             edad = int.parse(provider.edadController.text),
             Navigator.pop(context, 'OK'),
-            creationEstudiante = await ServiceEstudiante()
-                .createEstudiante(nombre, apellido, edad),
-            if (creationEstudiante.statusCode == 201)
+            creationEstudiante =
+                await provider.addEstudiante(nombre, apellido, edad),
+            if (creationEstudiante.statusCode == HttpStatus.created)
               {
-                provider.addEstudiante(nombre, apellido, edad),
                 sm.clearSnackBars(),
                 displaySuccessSnackbar(
                     sm, "Estudiante agregado correctamente!"),

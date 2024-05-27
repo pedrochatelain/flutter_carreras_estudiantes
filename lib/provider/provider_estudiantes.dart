@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:app_material_3/service/service_estudiante.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import '../model/estudiante.dart';
 
 class ProviderEstudiantes extends ChangeNotifier {
@@ -11,11 +15,15 @@ class ProviderEstudiantes extends ChangeNotifier {
     estudiantes = ests;
   }
 
-  void addEstudiante(String nombre, String apellido, int edad) {
-    Estudiante est = Estudiante.withoutLibretaUniversitaria(
-        nombre: nombre, apellido: apellido, edad: edad);
-    estudiantes.then((lista) => lista.add(est));
+  Future<http.Response> addEstudiante(
+      String nombre, String apellido, int edad) async {
+    http.Response creation =
+        await ServiceEstudiante().createEstudiante(nombre, apellido, edad);
+    var data = jsonDecode(creation.body);
+    Estudiante estudianteCreated = Estudiante.fromJson(data['entity']);
+    estudiantes.then((lista) => lista.add(estudianteCreated));
     notifyListeners();
+    return creation;
   }
 
   void clearText() {
