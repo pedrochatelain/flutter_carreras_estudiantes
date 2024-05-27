@@ -22,6 +22,13 @@ class ProviderCarreras extends ChangeNotifier {
     return _carreras;
   }
 
+  Future<void> incrementarCantidadInscriptos(Carrera c) async {
+    List<Carrera> carreras = await _carreras;
+    var index = carreras.indexWhere((carrera) => carrera.carrera == c.carrera);
+    carreras[index].inscriptos = carreras[index].inscriptos! + 1;
+    notifyListeners();
+  }
+
   // void clearText() {
   //   nombreController.clear();
   //   edadController.clear();

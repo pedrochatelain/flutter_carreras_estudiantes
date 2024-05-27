@@ -9,6 +9,9 @@ class ServiceEstudiante {
   String uriRandomUsers =
       'https://randomuser.me/api/?inc=name&nat=es,us,dk,fr,gb';
 
+  final String uriInscripcion =
+      'https://carrest.onrender.com/api/inscripciones';
+
   Future<http.Response> createEstudiante(
       String nombre, String apellido, int edad) async {
     return await http.post(
@@ -20,6 +23,21 @@ class ServiceEstudiante {
         'nombre': nombre,
         'apellido': apellido,
         'edad': edad.toString()
+      }),
+    );
+  }
+
+  Future<http.Response> inscribirEstudianteEnCarrera(
+      int idEstudiante, int idCarrera) async {
+    return await http.post(
+      Uri.parse(uriInscripcion),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id_carrera': idCarrera.toString(),
+        'id_estudiante': idEstudiante.toString(),
+        'anio_inscripcion': 2024.toString()
       }),
     );
   }

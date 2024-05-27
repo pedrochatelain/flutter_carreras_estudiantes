@@ -1,11 +1,9 @@
 class Carrera {
+  int? id;
   int? inscriptos;
   String carrera;
 
-  Carrera({
-    required this.carrera,
-    this.inscriptos,
-  });
+  Carrera({required this.carrera, this.inscriptos, this.id});
 
   Carrera.withoutInscriptos(this.carrera) {
     inscriptos = 0;
@@ -15,12 +13,13 @@ class Carrera {
     return Carrera(
       carrera: json['carrera'],
       inscriptos: json['inscriptos'],
+      id: json['id'],
     );
   }
 
   @override
   String toString() {
-    return carrera;
+    return "$carrera, id: $id";
   }
 
   toJson() {

@@ -12,7 +12,8 @@ class ProviderEstudiantes extends ChangeNotifier {
   }
 
   void addEstudiante(String nombre, String apellido, int edad) {
-    Estudiante est = Estudiante(nombre: nombre, apellido: apellido, edad: edad);
+    Estudiante est = Estudiante.withoutLibretaUniversitaria(
+        nombre: nombre, apellido: apellido, edad: edad);
     estudiantes.then((lista) => lista.add(est));
     notifyListeners();
   }
