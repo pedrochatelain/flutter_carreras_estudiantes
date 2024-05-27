@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_material_3/model/estudiante.dart';
 import 'package:app_material_3/provider/provider_carreras.dart';
 import 'package:app_material_3/provider/provider_inscripcion.dart';
@@ -63,13 +65,13 @@ class _RouteInscribirEstudianteState extends State<RouteInscribirEstudiante> {
                   Navigator.pop(context),
                   displayLoading(sm, estudiante, carrera!),
                   response = await inscribirEstudiante(estudiante, carrera),
-                  if (response.statusCode == 201)
+                  if (response.statusCode == HttpStatus.created)
                     {
                       displaySuccess(sm, estudiante, carrera),
                       Provider.of<ProviderCarreras>(sm.context, listen: false)
                           .incrementarCantidadInscriptos(carrera),
                     }
-                  else if (response.statusCode == 409)
+                  else if (response.statusCode == HttpStatus.conflict)
                     {displayError(sm, estudiante, carrera)}
                 },
             child: const Text("Inscribir")),
