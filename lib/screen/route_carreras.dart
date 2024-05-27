@@ -74,7 +74,7 @@ class _DataTableCarrerasState extends State<DataTableCarreras> {
     List<DataRow> lista = [];
     for (var carrera in data!) {
       lista.add(DataRow(cells: [
-        DataCell(Text(carrera.carrera)),
+        DataCell(Text(carrera.nombre)),
         DataCell(Text(carrera.inscriptos.toString()))
       ]));
     }

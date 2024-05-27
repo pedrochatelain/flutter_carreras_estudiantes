@@ -74,6 +74,8 @@ class _RouteInscribirEstudianteState extends State<RouteInscribirEstudiante> {
                     }
                   else if (response.statusCode == HttpStatus.conflict)
                     {displayError(estudiante, carrera)}
+                  else
+                    {print(response.body)}
                 },
             child: const Text("Inscribir")),
       ],
@@ -89,17 +91,17 @@ Future<http.Response> inscribirEstudiante(
 
 displaySuccess(Estudiante estudiante, Carrera carrera) {
   displaySuccessSnackbar(snackbarKey.currentState!,
-      "Se inscribió a ${estudiante.nombre} en ${carrera.carrera}");
+      "Se inscribió a ${estudiante.nombre} en ${carrera.nombre}");
 }
 
 displayError(Estudiante estudiante, Carrera carrera) {
   displayErrorSnackbar(snackbarKey.currentState!,
-      "${estudiante.nombre} ya fue inscripto/a en ${carrera.carrera}");
+      "${estudiante.nombre} ya fue inscripto/a en ${carrera.nombre}");
 }
 
 displayLoading(Estudiante estudiante, Carrera carrera) {
   displayLoadingSnackbar(snackbarKey.currentState!,
-      "Inscribiendo a ${estudiante.nombre} en ${carrera.carrera}");
+      "Inscribiendo a ${estudiante.nombre} en ${carrera.nombre}");
 }
 
 class DropdownCarrera extends StatefulWidget {
@@ -150,8 +152,7 @@ class _DropdownCarreraState extends State<DropdownCarrera> {
   List<DropdownMenuItem<Carrera>> getCarreras(List<Carrera> carreras) {
     List<DropdownMenuItem<Carrera>> result = [];
     for (var carrera in carreras) {
-      result
-          .add(DropdownMenuItem(value: carrera, child: Text(carrera.carrera)));
+      result.add(DropdownMenuItem(value: carrera, child: Text(carrera.nombre)));
     }
     return result;
   }

@@ -1,17 +1,17 @@
 class Carrera {
   int? id;
   int? inscriptos;
-  String carrera;
+  String nombre;
 
-  Carrera({required this.carrera, this.inscriptos, this.id});
+  Carrera({required this.nombre, this.inscriptos, this.id});
 
-  Carrera.withoutInscriptos(this.carrera) {
+  Carrera.withoutInscriptos(this.nombre) {
     inscriptos = 0;
   }
 
   factory Carrera.fromJson(Map<String, dynamic> json) {
     return Carrera(
-      carrera: json['carrera'],
+      nombre: json['carrera'],
       inscriptos: json['inscriptos'],
       id: json['id'],
     );
@@ -19,10 +19,10 @@ class Carrera {
 
   @override
   String toString() {
-    return "$carrera, id: $id";
+    return "$nombre, id: $id";
   }
 
   toJson() {
-    return <String, String>{'nombre': carrera};
+    return <String, String>{'nombre': nombre};
   }
 }
