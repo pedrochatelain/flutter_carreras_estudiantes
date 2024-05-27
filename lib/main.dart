@@ -10,6 +10,8 @@ import 'screen/route_add_estudiante.dart';
 import 'screen/route_carreras.dart';
 import 'screen/route_estudiantes.dart';
 
+final snackbarKey = GlobalKey<ScaffoldMessengerState>();
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
@@ -23,6 +25,7 @@ void main() {
         )
       ],
       child: MaterialApp(
+        scaffoldMessengerKey: snackbarKey,
         theme: ThemeData(
           textTheme: GoogleFonts.mcLarenTextTheme(),
           navigationBarTheme: const NavigationBarThemeData(

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_material_3/main.dart';
 import 'package:app_material_3/model/estudiante.dart';
 import 'package:app_material_3/provider/provider_carreras.dart';
 import 'package:app_material_3/provider/provider_inscripcion.dart';
@@ -61,18 +62,18 @@ class _RouteInscribirEstudianteState extends State<RouteInscribirEstudiante> {
             style: const ButtonStyle(
                 backgroundColor: WidgetStatePropertyAll(Colors.deepOrange)),
             onPressed: () async => {
-                  sm = ScaffoldMessenger.of(context),
                   Navigator.pop(context),
-                  displayLoading(sm, estudiante, carrera!),
+                  displayLoading(estudiante, carrera!),
                   response = await inscribirEstudiante(estudiante, carrera),
                   if (response.statusCode == HttpStatus.created)
                     {
-                      displaySuccess(sm, estudiante, carrera),
-                      Provider.of<ProviderCarreras>(sm.context, listen: false)
+                      displaySuccess(estudiante, carrera),
+                      Provider.of<ProviderCarreras>(snackbarKey.currentContext!,
+                              listen: false)
                           .incrementarCantidadInscriptos(carrera),
                     }
                   else if (response.statusCode == HttpStatus.conflict)
-                    {displayError(sm, estudiante, carrera)}
+                    {displayError(estudiante, carrera)}
                 },
             child: const Text("Inscribir")),
       ],
@@ -86,22 +87,19 @@ Future<http.Response> inscribirEstudiante(
       estudiante.libreta_universitaria!, carrera.id!);
 }
 
-displaySuccess(
-    ScaffoldMessengerState sm, Estudiante estudiante, Carrera carrera) {
-  displaySuccessSnackbar(
-      sm, "Se inscribió a ${estudiante.nombre} en ${carrera.carrera}");
+displaySuccess(Estudiante estudiante, Carrera carrera) {
+  displaySuccessSnackbar(snackbarKey.currentState!,
+      "Se inscribió a ${estudiante.nombre} en ${carrera.carrera}");
 }
 
-displayError(
-    ScaffoldMessengerState sm, Estudiante estudiante, Carrera carrera) {
-  displayErrorSnackbar(
-      sm, "${estudiante.nombre} ya fue inscripto/a en ${carrera.carrera}");
+displayError(Estudiante estudiante, Carrera carrera) {
+  displayErrorSnackbar(snackbarKey.currentState!,
+      "${estudiante.nombre} ya fue inscripto/a en ${carrera.carrera}");
 }
 
-displayLoading(
-    ScaffoldMessengerState sm, Estudiante estudiante, Carrera carrera) {
-  displayLoadingSnackbar(
-      sm, "Inscribiendo a ${estudiante.nombre} en ${carrera.carrera}");
+displayLoading(Estudiante estudiante, Carrera carrera) {
+  displayLoadingSnackbar(snackbarKey.currentState!,
+      "Inscribiendo a ${estudiante.nombre} en ${carrera.carrera}");
 }
 
 class DropdownCarrera extends StatefulWidget {
