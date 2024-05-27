@@ -58,7 +58,7 @@ class ButtonAddEstudiante extends StatelessWidget {
       onPressed: () async => {
         if (!provider.hasEmptyFields())
           {
-            displayLoadingSnackbar(sm, "Agregando estudiante..."),
+            displayLoadingSnackbar("Agregando estudiante..."),
             nombre = provider.nombreController.text,
             apellido = provider.apellidoController.text,
             edad = int.parse(provider.edadController.text),
@@ -68,12 +68,11 @@ class ButtonAddEstudiante extends StatelessWidget {
             if (creationEstudiante.statusCode == HttpStatus.created)
               {
                 sm.clearSnackBars(),
-                displaySuccessSnackbar(
-                    sm, "Estudiante agregado correctamente!"),
+                displaySuccessSnackbar("Estudiante agregado correctamente!"),
                 provider.clearText()
               }
             else
-              {displayErrorSnackbar(sm, "No se pudo agregar el estudiante")}
+              {displayErrorSnackbar("No se pudo agregar el estudiante")}
           },
       },
       child: const Text('Agregar'),

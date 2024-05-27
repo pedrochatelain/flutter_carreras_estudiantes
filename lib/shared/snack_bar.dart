@@ -1,8 +1,9 @@
+import 'package:app_material_3/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-void displaySuccessSnackbar(ScaffoldMessengerState sm, String message) {
-  sm.showSnackBar(
+void displaySuccessSnackbar(String message) {
+  snackbarKey.currentState!.showSnackBar(
     SnackBar(
       duration: const Duration(seconds: 4),
       behavior: SnackBarBehavior.floating,
@@ -24,8 +25,8 @@ void displaySuccessSnackbar(ScaffoldMessengerState sm, String message) {
   );
 }
 
-void displayErrorSnackbar(ScaffoldMessengerState sm, String message) {
-  sm.showSnackBar(
+void displayErrorSnackbar(String message) {
+  snackbarKey.currentState!.showSnackBar(
     SnackBar(
       duration: const Duration(seconds: 4),
       behavior: SnackBarBehavior.floating,
@@ -47,8 +48,8 @@ void displayErrorSnackbar(ScaffoldMessengerState sm, String message) {
   );
 }
 
-void displayLoadingSnackbar(ScaffoldMessengerState sm, String message) {
-  sm.showSnackBar(
+void displayLoadingSnackbar(String message) {
+  snackbarKey.currentState!.showSnackBar(
     SnackBar(
       duration: const Duration(seconds: 1),
       behavior: SnackBarBehavior.floating,

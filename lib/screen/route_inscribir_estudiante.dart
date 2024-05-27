@@ -88,17 +88,17 @@ Future<http.Response> inscribirEstudiante(
 }
 
 displaySuccess(Estudiante estudiante, Carrera carrera) {
-  displaySuccessSnackbar(snackbarKey.currentState!,
+  displaySuccessSnackbar(
       "Se inscribió a ${estudiante.nombre} en ${carrera.nombre}");
 }
 
 displayError(Estudiante estudiante, Carrera carrera) {
-  displayErrorSnackbar(snackbarKey.currentState!,
+  displayErrorSnackbar(
       "${estudiante.nombre} ya fue inscripto/a en ${carrera.nombre}");
 }
 
 displayLoading(Estudiante estudiante, Carrera carrera) {
-  displayLoadingSnackbar(snackbarKey.currentState!,
+  displayLoadingSnackbar(
       "Inscribiendo a ${estudiante.nombre} en ${carrera.nombre}");
 }
 

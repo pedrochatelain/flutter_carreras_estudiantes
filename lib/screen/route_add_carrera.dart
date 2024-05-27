@@ -29,15 +29,14 @@ class RouteAddCarrera extends StatelessWidget {
         FilledButton(
             onPressed: () async => {
                   Navigator.pop(context),
-                  displayLoadingSnackbar(sm, "Agregando carrera..."),
+                  displayLoadingSnackbar("Agregando carrera..."),
                   response = await Provider.of<ProviderCarreras>(context,
                           listen: false)
                       .addCarrera(nombreController.text),
                   if (response.statusCode == 201)
                     {
                       nombreController.text = "",
-                      displaySuccessSnackbar(
-                          sm, "Carrera agregada correctamente")
+                      displaySuccessSnackbar("Carrera agregada correctamente")
                     }
                 },
             child: Text(textOfButton))
