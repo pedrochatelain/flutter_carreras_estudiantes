@@ -1,7 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:app_material_3/model/carrera.dart';
 import 'package:app_material_3/service/service_carreras.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 class ProviderCarreras extends ChangeNotifier {
   late Future<List<Carrera>> _carreras;
@@ -11,11 +14,18 @@ class ProviderCarreras extends ChangeNotifier {
     _carreras = carreras;
   }
 
-  Future<Response> addCarrera(String nombre) {
-    Carrera c = Carrera(carrera: nombre, inscriptos: 0);
-    _carreras.then((lista) => lista.add(c));
+  Future<http.Response> addCarrera(String nombreCarrera) async {
+    http.Response response = await ServiceCarrera().postCarrera(nombreCarrera);
+    if (response.statusCode == HttpStatus.created) {
+      var data = jsonDecode(response.body);
+      Carrera newCarrera = Carrera(
+          id: data["entity"]["id"],
+          nombre: data["entity"]["nombre"],
+          inscriptos: 0);
+      _carreras.then((lista) => lista.add(newCarrera));
+    }
     notifyListeners();
-    return ServiceCarrera().postCarrera(c);
+    return response;
   }
 
   Future<List<Carrera>> getCarreras() {

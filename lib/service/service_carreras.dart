@@ -17,12 +17,11 @@ class ServiceCarrera {
     }
   }
 
-  Future<http.Response> postCarrera(Carrera carrera) async {
-    return await http.post(
-        Uri.parse('https://carrest.onrender.com/api/carreras'),
+  Future<http.Response> postCarrera(String nombreCarrera) async {
+    return http.post(Uri.parse('https://carrest.onrender.com/api/carreras'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(carrera.toJson()));
+        body: jsonEncode(Carrera(nombre: nombreCarrera).toJson()));
   }
 }

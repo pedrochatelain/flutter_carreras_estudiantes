@@ -74,8 +74,6 @@ class _RouteInscribirEstudianteState extends State<RouteInscribirEstudiante> {
                     }
                   else if (response.statusCode == HttpStatus.conflict)
                     {displayError(estudiante, carrera)}
-                  else
-                    {print(response.body)}
                 },
             child: const Text("Inscribir")),
       ],
