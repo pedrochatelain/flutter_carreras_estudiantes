@@ -49,19 +49,22 @@ class NameAndLastname extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 330,
-      child: Column(
-        children: [
-          Text(
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: fontsize),
-              estudiante.nombre),
-          Text(
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: fontsize),
-              estudiante.apellido),
-        ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: SizedBox(
+        width: 330,
+        child: Column(
+          children: [
+            Text(
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: fontsize),
+                estudiante.nombre),
+            Text(
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: fontsize),
+                estudiante.apellido),
+          ],
+        ),
       ),
     );
   }
