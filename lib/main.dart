@@ -27,7 +27,7 @@ void main() {
       child: MaterialApp(
         scaffoldMessengerKey: snackbarKey,
         theme: ThemeData(
-          textTheme: GoogleFonts.mcLarenTextTheme(),
+          textTheme: GoogleFonts.latoTextTheme(),
           navigationBarTheme: const NavigationBarThemeData(
               iconTheme:
                   WidgetStatePropertyAll(IconThemeData(color: Colors.white)),
