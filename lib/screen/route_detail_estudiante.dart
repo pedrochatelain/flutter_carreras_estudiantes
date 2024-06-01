@@ -50,18 +50,18 @@ class NameAndLastname extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.all(10),
       child: SizedBox(
         width: 330,
         child: Column(
           children: [
             Text(
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: fontsize),
+                style: const TextStyle(height: 1, fontSize: fontsize),
                 estudiante.nombre),
             Text(
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: fontsize),
+                style: const TextStyle(height: 1, fontSize: fontsize),
                 estudiante.apellido),
           ],
         ),
