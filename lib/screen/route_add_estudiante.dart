@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:app_material_3/model/estudiante.dart';
 import 'package:app_material_3/model/random_user.dart';
 import 'package:app_material_3/provider/provider_estudiantes.dart';
 import 'package:app_material_3/shared/snack_bar.dart';
@@ -48,10 +50,10 @@ class ButtonAddEstudiante extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Response creationEstudiante;
-    var sm = ScaffoldMessenger.of(context);
     String nombre;
     String apellido;
     int edad;
+    Estudiante estudianteCreado;
     return FilledButton(
       style: ButtonStyle(
           backgroundColor: WidgetStatePropertyAll(Colors.deepOrange[400])),
@@ -67,9 +69,10 @@ class ButtonAddEstudiante extends StatelessWidget {
                 await provider.addEstudiante(nombre, apellido, edad),
             if (creationEstudiante.statusCode == HttpStatus.created)
               {
-                sm.clearSnackBars(),
-                displaySuccessSnackbar("Estudiante agregado correctamente!"),
-                provider.clearText()
+                provider.clearText(),
+                estudianteCreado = Estudiante.fromJson(
+                    jsonDecode(creationEstudiante.body)['entity']),
+                displaySnackbarEstudianteCreado(estudianteCreado),
               }
             else
               {displayErrorSnackbar("No se pudo agregar el estudiante")}
