@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:app_material_3/model/estudiante.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,17 +15,21 @@ class ServiceEstudiante {
 
   Future<http.Response> createEstudiante(
       String nombre, String apellido, int edad) async {
-    return await http.post(
-      Uri.parse(uriEstudiantes),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'nombre': nombre,
-        'apellido': apellido,
-        'edad': edad.toString()
-      }),
-    );
+    try {
+      return await http.post(
+        Uri.parse(uriEstudiantes),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'nombre': nombre,
+          'apellido': apellido,
+          'edad': edad.toString()
+        }),
+      );
+    } catch (error) {
+      return http.Response("null", HttpStatus.badRequest);
+    }
   }
 
   Future<http.Response> inscribirEstudianteEnCarrera(
