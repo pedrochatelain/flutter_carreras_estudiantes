@@ -1,13 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:app_material_3/model/estudiante.dart';
 import 'package:app_material_3/model/random_user.dart';
 import 'package:app_material_3/provider/provider_estudiantes.dart';
 import 'package:app_material_3/shared/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 import '../service/service_estudiante.dart';
@@ -49,11 +45,10 @@ class ButtonAddEstudiante extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Response creationEstudiante;
     String nombre;
     String apellido;
     int edad;
-    Estudiante estudianteCreado;
+    Estudiante? estudiante;
     return FilledButton(
       style: ButtonStyle(
           backgroundColor: WidgetStatePropertyAll(Colors.deepOrange[400])),
@@ -65,14 +60,11 @@ class ButtonAddEstudiante extends StatelessWidget {
             apellido = provider.apellidoController.text,
             edad = int.parse(provider.edadController.text),
             Navigator.pop(context, 'OK'),
-            creationEstudiante =
-                await provider.addEstudiante(nombre, apellido, edad),
-            if (creationEstudiante.statusCode == HttpStatus.created)
+            estudiante = await provider.addEstudiante(nombre, apellido, edad),
+            if (estudiante != null)
               {
                 provider.clearText(),
-                estudianteCreado = Estudiante.fromJson(
-                    jsonDecode(creationEstudiante.body)['entity']),
-                displaySnackbarEstudianteCreado(estudianteCreado),
+                displaySnackbarEstudianteCreado(estudiante!),
               }
             else
               {displayErrorSnackbar("No se pudo agregar el estudiante")}
