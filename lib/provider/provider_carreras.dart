@@ -28,6 +28,11 @@ class ProviderCarreras extends ChangeNotifier {
     return response;
   }
 
+  void updateCarreras() {
+    setCarreras(ServiceCarrera().getCarreras());
+    notifyListeners();
+  }
+
   Future<List<Carrera>> getCarreras() {
     return _carreras;
   }

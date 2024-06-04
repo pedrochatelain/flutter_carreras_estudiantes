@@ -7,6 +7,7 @@ import 'package:app_material_3/provider/provider_inscripcion.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import '../provider/provider_carreras.dart';
 import '../shared/snack_bar.dart';
 import 'route_inscribir_estudiante.dart';
 
@@ -140,7 +141,8 @@ class ButtonDeleteStudent extends StatelessWidget {
                       .deleteStudent(estudiante),
               if (deletion.statusCode == HttpStatus.ok)
                 {
-                  // Provider.of<ProviderCarreras>(context).decreaseCantidadInscriptos(),
+                  Provider.of<ProviderCarreras>(context, listen: false)
+                      .updateCarreras(),
                   snackbarKey.currentState!.removeCurrentSnackBar(),
                   displaySuccessSnackbar(
                       "El estudiante ha sido borrado correctamente")
