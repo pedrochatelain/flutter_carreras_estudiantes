@@ -141,8 +141,10 @@ class ButtonDeleteStudent extends StatelessWidget {
                       .deleteStudent(estudiante),
               if (deletion.statusCode == HttpStatus.ok)
                 {
-                  Provider.of<ProviderCarreras>(context, listen: false)
+                  Provider.of<ProviderCarreras>(navKey.currentContext!,
+                          listen: false)
                       .updateCarreras(),
+                  navKey.currentState!.pop(),
                   snackbarKey.currentState!.removeCurrentSnackBar(),
                   displaySuccessSnackbar(
                       "El estudiante ha sido borrado correctamente")
