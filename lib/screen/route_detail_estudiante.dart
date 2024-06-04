@@ -11,11 +11,11 @@ import '../shared/snack_bar.dart';
 import 'route_inscribir_estudiante.dart';
 
 class RouteDetailEstudiante extends StatelessWidget {
-  Estudiante estudiante;
+  final Estudiante estudiante;
 
-  TextStyle estiloDetail = const TextStyle(fontSize: 30);
+  final TextStyle estiloDetail = const TextStyle(fontSize: 30);
 
-  RouteDetailEstudiante(this.estudiante, {super.key});
+  const RouteDetailEstudiante(this.estudiante, {super.key});
 
   @override
   Widget build(BuildContext context) {

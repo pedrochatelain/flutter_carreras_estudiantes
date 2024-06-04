@@ -32,7 +32,6 @@ class _RouteInscribirEstudianteState extends State<RouteInscribirEstudiante> {
         .carreraSeleccionada;
     Estudiante estudiante = widget.estudiante;
     http.Response response;
-    ScaffoldMessengerState sm;
     return AlertDialog(
       title: Text("Inscribir a ${widget.estudiante.nombre} en ..."),
       content: Column(

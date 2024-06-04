@@ -13,7 +13,6 @@ class RouteAddCarrera extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var sm = ScaffoldMessenger.of(context);
     var nombreController =
         Provider.of<ProviderCarreras>(context).nombreController;
     Response response;
