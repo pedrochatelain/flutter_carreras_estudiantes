@@ -66,9 +66,9 @@ class _RouteInscribirEstudianteState extends State<RouteInscribirEstudiante> {
                   Navigator.pop(context),
                   displayLoading(estudiante, carrera!),
                   response = await inscribirEstudiante(estudiante, carrera),
+                  snackbarKey.currentState!.removeCurrentSnackBar(),
                   if (response.statusCode == HttpStatus.created)
                     {
-                      snackbarKey.currentState!.removeCurrentSnackBar(),
                       displaySuccess(estudiante, carrera),
                       Provider.of<ProviderCarreras>(snackbarKey.currentContext!,
                               listen: false)

@@ -63,9 +63,9 @@ class ButtonAddEstudiante extends StatelessWidget {
             edad = int.parse(provider.edadController.text),
             Navigator.pop(context, 'OK'),
             estudiante = await provider.addEstudiante(nombre, apellido, edad),
+            snackbarKey.currentState!.removeCurrentSnackBar(),
             if (estudiante != null)
               {
-                snackbarKey.currentState!.removeCurrentSnackBar(),
                 provider.clearText(),
                 displaySnackbarEstudianteCreado(estudiante!),
               }
