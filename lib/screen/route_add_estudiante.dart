@@ -1,3 +1,4 @@
+import 'package:app_material_3/main.dart';
 import 'package:app_material_3/model/estudiante.dart';
 import 'package:app_material_3/model/random_user.dart';
 import 'package:app_material_3/provider/provider_estudiantes.dart';
@@ -55,6 +56,7 @@ class ButtonAddEstudiante extends StatelessWidget {
       onPressed: () async => {
         if (!provider.hasEmptyFields())
           {
+            snackbarKey.currentState!.removeCurrentSnackBar(),
             displayLoadingSnackbar("Agregando estudiante..."),
             nombre = provider.nombreController.text,
             apellido = provider.apellidoController.text,
@@ -63,6 +65,7 @@ class ButtonAddEstudiante extends StatelessWidget {
             estudiante = await provider.addEstudiante(nombre, apellido, edad),
             if (estudiante != null)
               {
+                snackbarKey.currentState!.removeCurrentSnackBar(),
                 provider.clearText(),
                 displaySnackbarEstudianteCreado(estudiante!),
               }

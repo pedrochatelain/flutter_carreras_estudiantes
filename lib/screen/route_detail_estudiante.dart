@@ -133,6 +133,7 @@ class ButtonDeleteStudent extends StatelessWidget {
           side: const BorderSide(color: Colors.red),
         ),
         onPressed: () async => {
+              snackbarKey.currentState!.removeCurrentSnackBar(),
               displayLoadingSnackbar("Borrando estudiante..."),
               deletion =
                   await Provider.of<ProviderEstudiantes>(context, listen: false)
@@ -140,7 +141,7 @@ class ButtonDeleteStudent extends StatelessWidget {
               if (deletion.statusCode == HttpStatus.ok)
                 {
                   // Provider.of<ProviderCarreras>(context).decreaseCantidadInscriptos(),
-                  snackbarKey.currentState!.hideCurrentSnackBar(),
+                  snackbarKey.currentState!.removeCurrentSnackBar(),
                   displaySuccessSnackbar(
                       "El estudiante ha sido borrado correctamente")
                 }

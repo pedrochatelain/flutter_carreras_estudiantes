@@ -93,7 +93,6 @@ void displayErrorSnackbar(String message) {
 void displayLoadingSnackbar(String message) {
   snackbarKey.currentState!.showSnackBar(
     SnackBar(
-      duration: const Duration(seconds: 1),
       behavior: SnackBarBehavior.floating,
       content: Row(
         children: <Widget>[

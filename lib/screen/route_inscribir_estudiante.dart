@@ -61,12 +61,15 @@ class _RouteInscribirEstudianteState extends State<RouteInscribirEstudiante> {
         FilledButton(
             style: const ButtonStyle(
                 backgroundColor: WidgetStatePropertyAll(Colors.deepOrange)),
+            child: const Text("Inscribir"),
             onPressed: () async => {
+                  snackbarKey.currentState!.removeCurrentSnackBar(),
                   Navigator.pop(context),
                   displayLoading(estudiante, carrera!),
                   response = await inscribirEstudiante(estudiante, carrera),
                   if (response.statusCode == HttpStatus.created)
                     {
+                      snackbarKey.currentState!.removeCurrentSnackBar(),
                       displaySuccess(estudiante, carrera),
                       Provider.of<ProviderCarreras>(snackbarKey.currentContext!,
                               listen: false)
@@ -74,8 +77,7 @@ class _RouteInscribirEstudianteState extends State<RouteInscribirEstudiante> {
                     }
                   else if (response.statusCode == HttpStatus.conflict)
                     {displayError(estudiante, carrera)}
-                },
-            child: const Text("Inscribir")),
+                }),
       ],
     );
   }

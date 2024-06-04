@@ -1,3 +1,4 @@
+import 'package:app_material_3/main.dart';
 import 'package:app_material_3/provider/provider_carreras.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -28,6 +29,7 @@ class RouteAddCarrera extends StatelessWidget {
       actions: [
         FilledButton(
             onPressed: () async => {
+                  snackbarKey.currentState!.removeCurrentSnackBar(),
                   Navigator.pop(context),
                   displayLoadingSnackbar("Agregando carrera..."),
                   response = await Provider.of<ProviderCarreras>(context,
@@ -35,6 +37,7 @@ class RouteAddCarrera extends StatelessWidget {
                       .addCarrera(nombreController.text),
                   if (response.statusCode == 201)
                     {
+                      snackbarKey.currentState!.removeCurrentSnackBar(),
                       nombreController.text = "",
                       displaySuccessSnackbar("Carrera agregada correctamente")
                     }
