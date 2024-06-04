@@ -75,4 +75,13 @@ class ServiceEstudiante {
       throw Exception('Failed to load random users');
     }
   }
+
+  Future<http.Response> deleteStudent(Estudiante estudiante) async {
+    return http.delete(
+      Uri.parse("$uriEstudiantes/${estudiante.libreta_universitaria}"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+  }
 }

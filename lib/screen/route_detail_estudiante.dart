@@ -1,9 +1,13 @@
 import 'dart:io';
 
+import 'package:app_material_3/main.dart';
 import 'package:app_material_3/model/estudiante.dart';
+import 'package:app_material_3/provider/provider_estudiantes.dart';
 import 'package:app_material_3/provider/provider_inscripcion.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import '../shared/snack_bar.dart';
 import 'route_inscribir_estudiante.dart';
 
 class RouteDetailEstudiante extends StatelessWidget {
@@ -19,15 +23,15 @@ class RouteDetailEstudiante extends StatelessWidget {
         appBar: AppBar(),
         body: Column(
           children: [
-            PhotoStudent(),
+            const PhotoStudent(),
             NameAndLastname(estudiante: estudiante),
-            Divider(
+            const Divider(
               thickness: .2,
               indent: 30,
               endIndent: 30,
             ),
             WrapperInfoEstudiante(estudiante: estudiante),
-            Divider(
+            const Divider(
               thickness: .2,
               indent: 30,
               endIndent: 30,
@@ -82,7 +86,7 @@ class PhotoStudent extends StatelessWidget {
       child: CircleAvatar(
         backgroundColor: Colors.grey.shade200,
         radius: 70,
-        backgroundImage: AssetImage("assets/blank_profile.jfif"),
+        backgroundImage: const AssetImage("assets/blank_profile.jfif"),
       ),
     );
   }
@@ -102,8 +106,8 @@ class Buttons extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ButtonDeleteStudent(),
-          SizedBox(
+          ButtonDeleteStudent(estudiante: estudiante),
+          const SizedBox(
             height: 10,
           ),
           ButtonInscribirEstudiante(estudiante: estudiante),
@@ -114,17 +118,33 @@ class Buttons extends StatelessWidget {
 }
 
 class ButtonDeleteStudent extends StatelessWidget {
+  final Estudiante estudiante;
+
   const ButtonDeleteStudent({
     super.key,
+    required this.estudiante,
   });
 
   @override
   Widget build(BuildContext context) {
+    http.Response deletion;
     return OutlinedButton(
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: Colors.red),
         ),
-        onPressed: () => {},
+        onPressed: () async => {
+              displayLoadingSnackbar("Borrando estudiante..."),
+              deletion =
+                  await Provider.of<ProviderEstudiantes>(context, listen: false)
+                      .deleteStudent(estudiante),
+              if (deletion.statusCode == HttpStatus.ok)
+                {
+                  // Provider.of<ProviderCarreras>(context).decreaseCantidadInscriptos(),
+                  snackbarKey.currentState!.hideCurrentSnackBar(),
+                  displaySuccessSnackbar(
+                      "El estudiante ha sido borrado correctamente")
+                }
+            },
         child: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -153,25 +173,16 @@ class WrapperInfoEstudiante extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Stack(
           children: [
-            Container(
-              // decoration: BoxDecoration(
-              //     border: Border.all(
-              //         width: .1,
-              //         strokeAlign: BorderSide.strokeAlignInside,
-              //         color: Colors.deepOrange),
-              //     borderRadius: const BorderRadius.all(Radius.circular(5))),
-              // color: Colors.red,
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    InfoEstudiante(
-                        titulo: "Edad", info: estudiante.edad.toString()),
-                    InfoEstudiante(titulo: "Carreras", info: "???"),
-                    InfoEstudiante(
-                        titulo: "Fecha de nacimiento", info: "05/07/1997"),
-                  ],
-                ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  InfoEstudiante(
+                      titulo: "Edad", info: estudiante.edad.toString()),
+                  const InfoEstudiante(titulo: "Carreras", info: "???"),
+                  const InfoEstudiante(
+                      titulo: "Fecha de nacimiento", info: "05/07/1997"),
+                ],
               ),
             ),
             Row(
@@ -179,7 +190,7 @@ class WrapperInfoEstudiante extends StatelessWidget {
               children: [
                 IconButton(
                     onPressed: () => {},
-                    icon: Icon(color: Colors.deepOrange, Icons.edit)),
+                    icon: const Icon(color: Colors.deepOrange, Icons.edit)),
               ],
             ),
           ],

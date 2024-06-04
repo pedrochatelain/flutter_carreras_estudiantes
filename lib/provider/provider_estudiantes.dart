@@ -41,4 +41,14 @@ class ProviderEstudiantes extends ChangeNotifier {
         nombreController.text == '' ||
         apellidoController.text == '';
   }
+
+  Future<http.Response> deleteStudent(Estudiante estudiante) async {
+    http.Response deletion =
+        await ServiceEstudiante().deleteStudent(estudiante);
+    if (deletion.statusCode == HttpStatus.ok) {
+      estudiantes.then((list) => list.remove(estudiante));
+      notifyListeners();
+    }
+    return deletion;
+  }
 }
