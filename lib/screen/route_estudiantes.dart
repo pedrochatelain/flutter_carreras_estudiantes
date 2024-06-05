@@ -56,31 +56,45 @@ class DataTableEstudiantesState extends State<DataTableEstudiantes> {
                   ),
               itemCount: estudiantes!.length,
               itemBuilder: (context, index) {
-                var nombre = estudiantes[index].nombre.toString();
-                var apellido = estudiantes[index].apellido.toString();
-                return ListTile(
-                  contentPadding: const EdgeInsets.all(12),
-                  enabled: true,
-                  onTap: () => {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                          // duration: Duration(seconds: 2),
-                          child: RouteDetailEstudiante(estudiantes[index]),
-                          type: PageTransitionType.rightToLeft,
-                        ))
-                  },
-                  title: Text("$nombre $apellido"),
-                  subtitle: Text("${estudiantes[index].edad} años"),
-                  leading: Icon(color: Colors.deepOrange[300], Icons.person),
-                  trailing: const Icon(size: 20, Icons.arrow_right),
-                );
+                return ListTileEstudiante(estudiante: estudiantes[index]);
               });
         } else if (snapshot.hasError) {
           return Text(snapshot.error.toString());
         }
         return const Center(child: CircularProgressIndicator());
       },
+    );
+  }
+}
+
+class ListTileEstudiante extends StatelessWidget {
+  final Estudiante estudiante;
+
+  const ListTileEstudiante({
+    super.key,
+    required this.estudiante,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var nombre = estudiante.nombre.toString();
+    var apellido = estudiante.apellido.toString();
+    return ListTile(
+      enableFeedback: false,
+      contentPadding: const EdgeInsets.all(12),
+      // enabled: false,
+      onTap: () => {
+        Navigator.push(
+            context,
+            PageTransition(
+              child: RouteDetailEstudiante(estudiante),
+              type: PageTransitionType.rightToLeft,
+            ))
+      },
+      title: Text("$nombre $apellido"),
+      subtitle: Text("${estudiante.edad} años"),
+      leading: Icon(color: Colors.deepOrange[300], Icons.person),
+      trailing: const Icon(size: 20, Icons.arrow_right),
     );
   }
 }
