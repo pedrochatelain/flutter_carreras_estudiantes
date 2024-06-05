@@ -30,6 +30,15 @@ class ProviderEstudiantes extends ChangeNotifier {
     return null;
   }
 
+  void addToList(Estudiante est) {
+    estudiantes.then((lista) => lista.add(Estudiante(
+        libreta_universitaria: est.libreta_universitaria,
+        nombre: est.nombre,
+        edad: est.edad,
+        apellido: est.apellido)));
+    notifyListeners();
+  }
+
   void clearText() {
     nombreController.clear();
     apellidoController.clear();
@@ -43,12 +52,11 @@ class ProviderEstudiantes extends ChangeNotifier {
   }
 
   Future<http.Response> deleteStudent(Estudiante estudiante) async {
-    http.Response deletion =
-        await ServiceEstudiante().deleteStudent(estudiante);
-    if (deletion.statusCode == HttpStatus.ok) {
-      estudiantes.then((list) => list.remove(estudiante));
-      notifyListeners();
-    }
-    return deletion;
+    return ServiceEstudiante().deleteStudent(estudiante);
+  }
+
+  void removeStudentFromList(Estudiante estudiante) {
+    estudiantes.then((list) => list.remove(estudiante));
+    notifyListeners();
   }
 }

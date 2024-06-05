@@ -134,6 +134,8 @@ class ButtonDeleteStudent extends StatelessWidget {
           side: const BorderSide(color: Colors.red),
         ),
         onPressed: () async => {
+              Provider.of<ProviderEstudiantes>(context, listen: false)
+                  .removeStudentFromList(estudiante),
               navKey.currentState!.pop(),
               snackbarKey.currentState!.removeCurrentSnackBar(),
               displayLoadingSnackbar("Borrando estudiante..."),
@@ -147,6 +149,14 @@ class ButtonDeleteStudent extends StatelessWidget {
                       .updateCarreras(),
                   snackbarKey.currentState!.removeCurrentSnackBar(),
                   displaySuccessSnackbar("El estudiante ha sido borrado")
+                }
+              else
+                {
+                  snackbarKey.currentState!.removeCurrentSnackBar(),
+                  displayErrorSnackbar("No se pudo eliminar el estudiante"),
+                  Provider.of<ProviderEstudiantes>(navKey.currentContext!,
+                          listen: false)
+                      .addToList(estudiante)
                 }
             },
         child: const Row(
