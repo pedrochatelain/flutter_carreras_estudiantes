@@ -26,3 +26,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/blank_profile.jfif
+    - assets/empty_classroom.jpg

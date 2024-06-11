@@ -31,11 +31,19 @@ class DataTableEstudiantes extends StatefulWidget {
 }
 
 class DataTableEstudiantesState extends State<DataTableEstudiantes> {
+  Image? imageOfEmptyClassroom;
   @override
   void initState() {
     super.initState();
+    imageOfEmptyClassroom = Image.asset("assets/empty_classroom.jpg");
     Provider.of<ProviderEstudiantes>(listen: false, context)
         .setEstudiantes(ServiceEstudiante().getEstudiantes());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    precacheImage(imageOfEmptyClassroom!.image, context);
   }
 
   @override
@@ -46,23 +54,66 @@ class DataTableEstudiantesState extends State<DataTableEstudiantes> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           var estudiantes = snapshot.data;
-          return ListView.separated(
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(
-                    height: 0,
-                    thickness: .2,
-                    indent: 10,
-                    endIndent: 10,
-                  ),
-              itemCount: estudiantes!.length,
-              itemBuilder: (context, index) {
-                return ListTileEstudiante(estudiante: estudiantes[index]);
-              });
+          return estudiantes!.isEmpty
+              ? ScreenEmptyListOfStudents(
+                  imageOfEmptyClassroom: imageOfEmptyClassroom)
+              : ListView.separated(
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(
+                        height: 0,
+                        thickness: .2,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                  itemCount: estudiantes.length,
+                  itemBuilder: (context, index) {
+                    return ListTileEstudiante(estudiante: estudiantes[index]);
+                  });
         } else if (snapshot.hasError) {
           return Text(snapshot.error.toString());
         }
         return const Center(child: CircularProgressIndicator());
       },
+    );
+  }
+}
+
+class ScreenEmptyListOfStudents extends StatelessWidget {
+  const ScreenEmptyListOfStudents({
+    super.key,
+    required this.imageOfEmptyClassroom,
+  });
+
+  final Image? imageOfEmptyClassroom;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width * .9,
+            child: Opacity(
+              opacity: .6,
+              child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  child: ColorFiltered(
+                      colorFilter: const ColorFilter.mode(
+                        Colors.grey,
+                        BlendMode.saturation,
+                      ),
+                      child: imageOfEmptyClassroom)),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Text(
+                style: TextStyle(color: Colors.grey.shade700, fontSize: 18),
+                "It seems the clasroom is empty..."),
+          ),
+        ],
+      ),
     );
   }
 }
