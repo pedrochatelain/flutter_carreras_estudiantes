@@ -110,8 +110,49 @@ class _ContentDialogState extends State<ContentDialog> {
             Provider.of<ProviderEstudiantes>(context, listen: false)
                 .apellidoController),
         const SizedBox(height: 20),
+        const FechaNacimiento(),
+        const SizedBox(height: 20),
         const EdadTextField(),
       ],
+    );
+  }
+}
+
+class FechaNacimiento extends StatelessWidget {
+  const FechaNacimiento({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    DateTime? date;
+    return GestureDetector(
+      onTap: () async => {
+        date = await showDatePicker(
+            initialDatePickerMode: DatePickerMode.year,
+            context: context,
+            firstDate: DateTime(1900),
+            lastDate: DateTime.now()),
+        if (date != null)
+          {
+            Provider.of<ProviderEstudiantes>(navKey.currentContext!,
+                    listen: false)
+                .setFechaNacimiento(
+                    "${date!.day}/${date!.month}/${date!.year}"),
+            Provider.of<ProviderEstudiantes>(navKey.currentContext!,
+                    listen: false)
+                .setEdad(DateTime.now().difference(date!).abs().inDays ~/ 365),
+          }
+      },
+      child: AbsorbPointer(
+        child: TextFormField(
+            controller: Provider.of<ProviderEstudiantes>(context, listen: true)
+                .fechaNacimientoController,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: "Fecha de nacimiento",
+            )),
+      ),
     );
   }
 }
@@ -129,7 +170,7 @@ class _EdadTextFieldState extends State<EdadTextField> {
   @override
   Widget build(BuildContext context) {
     var edadController =
-        Provider.of<ProviderEstudiantes>(context, listen: false).edadController;
+        Provider.of<ProviderEstudiantes>(context, listen: true).edadController;
     bool isEdadEmpty = edadController.text.isEmpty;
     return TextFormField(
       onChanged: (value) => setState(() {
