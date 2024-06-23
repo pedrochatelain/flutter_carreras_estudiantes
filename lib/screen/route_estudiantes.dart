@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
+import '../provider/provider_current_screen.dart';
 import 'route_detail_estudiante.dart';
 
 class RouteEstudiantes extends StatelessWidget {
@@ -12,14 +13,16 @@ class RouteEstudiantes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            scrolledUnderElevation: 0,
-            title: const Text(
-                style: TextStyle(
-                    color: Colors.deepOrange, fontWeight: FontWeight.bold),
-                "Estudiantes")),
-        body: const DataTableEstudiantes());
+    return SelectionArea(
+      child: Scaffold(
+          appBar: AppBar(
+              scrolledUnderElevation: 0,
+              title: const Text(
+                  style: TextStyle(
+                      color: Colors.deepOrange, fontWeight: FontWeight.bold),
+                  "Estudiantes")),
+          body: const DataTableEstudiantes()),
+    );
   }
 }
 
@@ -128,20 +131,24 @@ class ListTileEstudiante extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var hasTabletOrPhoneWidth = MediaQuery.sizeOf(context).width < 600;
     var nombre = estudiante.nombre.toString();
     var apellido = estudiante.apellido.toString();
     return ListTile(
       enableFeedback: false,
       contentPadding: const EdgeInsets.all(12),
       // enabled: false,
-      onTap: () => {
-        Navigator.push(
-            context,
-            PageTransition(
-              child: RouteDetailEstudiante(estudiante),
-              type: PageTransitionType.rightToLeft,
-            ))
-      },
+      onTap: hasTabletOrPhoneWidth
+          ? () => {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                      child: RouteDetailEstudiante(estudiante),
+                      type: PageTransitionType.rightToLeft,
+                    ))
+              }
+          : () => Provider.of<ProviderCurrentScreen>(context, listen: false)
+              .setCurrentScreen(RouteDetailEstudiante(estudiante)),
       title: Text("$nombre $apellido"),
       subtitle: Text("${estudiante.edad} años"),
       leading: Icon(color: Colors.deepOrange[300], Icons.person),

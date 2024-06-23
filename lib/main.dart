@@ -6,6 +6,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 
 import 'provider/provider_carreras.dart';
+import 'provider/provider_current_screen.dart';
 import 'screen/route_add_estudiante.dart';
 import 'screen/route_carreras.dart';
 import 'screen/route_estudiantes.dart';
@@ -23,6 +24,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => ProviderCarreras(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProviderCurrentScreen(),
         )
       ],
       child: MaterialApp(
@@ -66,45 +70,109 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: SpeedDial(
-        onClose: () => setState(() => isDialOpen.value = false),
-        onPress: () => setState(() => isDialOpen.value = true),
-        overlayOpacity: .54,
-        overlayColor: Colors.black54,
-        openCloseDial: isDialOpen,
-        backgroundColor: Colors.deepOrange,
-        foregroundColor: Colors.white,
-        icon: isDialOpen.value == false ? Icons.add : Icons.close,
-        children: [
-          SpeedDialChild(
-            labelWidget: ButtonAddEstudiante(closeDial),
+    var hasTabletOrPhoneWidth = MediaQuery.sizeOf(context).width < 600;
+    return SelectionArea(
+      child: Scaffold(
+          floatingActionButton: SpeedDial(
+            onClose: () => setState(() => isDialOpen.value = false),
+            onPress: () => setState(() => isDialOpen.value = true),
+            overlayOpacity: .54,
+            overlayColor: Colors.black54,
+            openCloseDial: isDialOpen,
+            backgroundColor: Colors.deepOrange,
+            foregroundColor: Colors.white,
+            icon: isDialOpen.value == false ? Icons.add : Icons.close,
+            children: [
+              SpeedDialChild(
+                labelWidget: ButtonAddEstudiante(closeDial),
+              ),
+              SpeedDialChild(
+                labelWidget: ButtonAddCarrera(closeDial),
+              )
+            ],
           ),
-          SpeedDialChild(
-            labelWidget: ButtonAddCarrera(closeDial),
-          )
-        ],
-      ),
-      bottomNavigationBar: NavigationBar(
-          backgroundColor: Colors.deepOrange,
-          onDestinationSelected: (int index) {
-            setState(() => currentPageIndex = index);
-          },
-          indicatorColor: Colors.deepOrange[800],
+          bottomNavigationBar: hasTabletOrPhoneWidth
+              ? NavigationBar(
+                  backgroundColor: Colors.deepOrange,
+                  onDestinationSelected: (int index) {
+                    setState(() => currentPageIndex = index);
+                  },
+                  indicatorColor: Colors.deepOrange[800],
+                  selectedIndex: currentPageIndex,
+                  destinations: const [
+                      NavigationDestination(
+                        selectedIcon: Icon(Icons.person_2),
+                        icon: Icon(Icons.person_2_outlined),
+                        label: 'Estudiantes',
+                      ),
+                      NavigationDestination(
+                        selectedIcon: Icon(Icons.view_list),
+                        icon: Icon(Icons.view_list_outlined),
+                        label: 'Carreras',
+                      )
+                    ])
+              : null,
+          body: hasTabletOrPhoneWidth
+              ? Expanded(
+                  child: IndexedStack(
+                      index: currentPageIndex, children: _children))
+              : Row(
+                  children: [
+                    DesktopNavigationDrawer(children: _children),
+                    Expanded(
+                        child: Provider.of<ProviderCurrentScreen>(context,
+                                listen: true)
+                            .currentScreen)
+                  ],
+                )
+          // appBar: AppBar(),
+          ),
+    );
+  }
+}
+
+class DesktopNavigationDrawer extends StatefulWidget {
+  const DesktopNavigationDrawer({
+    super.key,
+    required List<Widget> children,
+  }) : _children = children;
+
+  final List<Widget> _children;
+
+  @override
+  State<DesktopNavigationDrawer> createState() =>
+      _DesktopNavigationDrawerState();
+}
+
+class _DesktopNavigationDrawerState extends State<DesktopNavigationDrawer> {
+  var currentPageIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        NavigationDrawer(
+          // indicatorShape: InputBorder.none,
+          // backgroundColor: Colors.deepOrange,
+          tilePadding: const EdgeInsets.symmetric(horizontal: 0),
+          indicatorColor: Colors.deepOrange,
           selectedIndex: currentPageIndex,
-          destinations: const [
-            NavigationDestination(
-              selectedIcon: Icon(Icons.person_2),
-              icon: Icon(Icons.person_2_outlined),
-              label: 'Estudiantes',
-            ),
-            NavigationDestination(
-              selectedIcon: Icon(Icons.view_list),
-              icon: Icon(Icons.view_list_outlined),
-              label: 'Carreras',
-            )
-          ]),
-      body: IndexedStack(index: currentPageIndex, children: _children),
+          onDestinationSelected: (value) => {
+            setState(() {
+              currentPageIndex = value;
+              Provider.of<ProviderCurrentScreen>(context, listen: false)
+                  .setCurrentScreen(widget._children[currentPageIndex]);
+            }),
+          },
+          children: const [
+            NavigationDrawerDestination(
+                icon: Icon(Icons.person_2_outlined),
+                label: Text("Estudiantes")),
+            NavigationDrawerDestination(
+                icon: Icon(Icons.view_list_outlined), label: Text("Carreras"))
+          ],
+        ),
+      ],
     );
   }
 }
