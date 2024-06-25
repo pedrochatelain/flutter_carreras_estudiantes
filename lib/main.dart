@@ -10,6 +10,7 @@ import 'provider/provider_current_screen.dart';
 import 'screen/route_add_estudiante.dart';
 import 'screen/route_carreras.dart';
 import 'screen/route_estudiantes.dart';
+import 'shared/desktop_navigation_drawer.dart';
 
 final snackbarKey = GlobalKey<ScaffoldMessengerState>();
 final navKey = GlobalKey<NavigatorState>();
@@ -27,7 +28,10 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => ProviderCurrentScreen(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProviderNavigationDrawer(),
+        ),
       ],
       child: MaterialApp(
         navigatorKey: navKey,
@@ -71,109 +75,64 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     var hasTabletOrPhoneWidth = MediaQuery.sizeOf(context).width < 600;
-    return SelectionArea(
-      child: Scaffold(
-          floatingActionButton: SpeedDial(
-            onClose: () => setState(() => isDialOpen.value = false),
-            onPress: () => setState(() => isDialOpen.value = true),
-            overlayOpacity: .54,
-            overlayColor: Colors.black54,
-            openCloseDial: isDialOpen,
-            backgroundColor: Colors.deepOrange,
-            foregroundColor: Colors.white,
-            icon: isDialOpen.value == false ? Icons.add : Icons.close,
-            children: [
-              SpeedDialChild(
-                labelWidget: ButtonAddEstudiante(closeDial),
-              ),
-              SpeedDialChild(
-                labelWidget: ButtonAddCarrera(closeDial),
-              )
-            ],
-          ),
-          bottomNavigationBar: hasTabletOrPhoneWidth
-              ? NavigationBar(
-                  backgroundColor: Colors.deepOrange,
-                  onDestinationSelected: (int index) {
-                    setState(() => currentPageIndex = index);
-                  },
-                  indicatorColor: Colors.deepOrange[800],
-                  selectedIndex: currentPageIndex,
-                  destinations: const [
-                      NavigationDestination(
-                        selectedIcon: Icon(Icons.person_2),
-                        icon: Icon(Icons.person_2_outlined),
-                        label: 'Estudiantes',
-                      ),
-                      NavigationDestination(
-                        selectedIcon: Icon(Icons.view_list),
-                        icon: Icon(Icons.view_list_outlined),
-                        label: 'Carreras',
-                      )
-                    ])
-              : null,
-          body: hasTabletOrPhoneWidth
-              ? Expanded(
-                  child: IndexedStack(
-                      index: currentPageIndex, children: _children))
-              : Row(
-                  children: [
-                    DesktopNavigationDrawer(children: _children),
-                    Expanded(
-                        child: Provider.of<ProviderCurrentScreen>(context,
-                                listen: true)
-                            .currentScreen)
-                  ],
-                )
-          // appBar: AppBar(),
-          ),
-    );
-  }
-}
-
-class DesktopNavigationDrawer extends StatefulWidget {
-  const DesktopNavigationDrawer({
-    super.key,
-    required List<Widget> children,
-  }) : _children = children;
-
-  final List<Widget> _children;
-
-  @override
-  State<DesktopNavigationDrawer> createState() =>
-      _DesktopNavigationDrawerState();
-}
-
-class _DesktopNavigationDrawerState extends State<DesktopNavigationDrawer> {
-  var currentPageIndex = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        NavigationDrawer(
-          // indicatorShape: InputBorder.none,
-          // backgroundColor: Colors.deepOrange,
-          tilePadding: const EdgeInsets.symmetric(horizontal: 0),
-          indicatorColor: Colors.deepOrange,
-          selectedIndex: currentPageIndex,
-          onDestinationSelected: (value) => {
-            setState(() {
-              currentPageIndex = value;
-              Provider.of<ProviderCurrentScreen>(context, listen: false)
-                  .setCurrentScreen(widget._children[currentPageIndex]);
-            }),
-          },
-          children: const [
-            NavigationDrawerDestination(
-                icon: Icon(Icons.person_2_outlined),
-                label: Text("Estudiantes")),
-            NavigationDrawerDestination(
-                icon: Icon(Icons.view_list_outlined), label: Text("Carreras"))
+    return Scaffold(
+        floatingActionButton: SpeedDial(
+          onClose: () => setState(() => isDialOpen.value = false),
+          onPress: () => setState(() => isDialOpen.value = true),
+          overlayOpacity: .54,
+          overlayColor: Colors.black54,
+          openCloseDial: isDialOpen,
+          backgroundColor: Colors.deepOrange,
+          foregroundColor: Colors.white,
+          icon: isDialOpen.value == false ? Icons.add : Icons.close,
+          children: [
+            SpeedDialChild(
+              labelWidget: ButtonAddEstudiante(closeDial),
+            ),
+            SpeedDialChild(
+              labelWidget: ButtonAddCarrera(closeDial),
+            )
           ],
         ),
-      ],
-    );
+        bottomNavigationBar: hasTabletOrPhoneWidth
+            ? NavigationBar(
+                backgroundColor: Colors.deepOrange,
+                onDestinationSelected: (int index) {
+                  setState(() => currentPageIndex = index);
+                },
+                indicatorColor: Colors.deepOrange[800],
+                selectedIndex: currentPageIndex,
+                destinations: const [
+                    NavigationDestination(
+                      selectedIcon: Icon(Icons.person_2),
+                      icon: Icon(Icons.person_2_outlined),
+                      label: 'Estudiantes',
+                    ),
+                    NavigationDestination(
+                      selectedIcon: Icon(Icons.view_list),
+                      icon: Icon(Icons.view_list_outlined),
+                      label: 'Carreras',
+                    )
+                  ])
+            : null,
+        body: hasTabletOrPhoneWidth
+            ? Expanded(
+                child:
+                    IndexedStack(index: currentPageIndex, children: _children))
+            : Row(
+                children: [
+                  const DesktopNavigationDrawer(),
+                  Expanded(
+                      child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Provider.of<ProviderCurrentScreen>(context,
+                            listen: true)
+                        .currentScreen,
+                  ))
+                ],
+              )
+        // appBar: AppBar(),
+        );
   }
 }
 
