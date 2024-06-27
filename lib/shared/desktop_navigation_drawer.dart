@@ -16,39 +16,64 @@ class DesktopNavigationDrawer extends StatefulWidget {
 }
 
 class _DesktopNavigationDrawerState extends State<DesktopNavigationDrawer> {
+  List<Destination> destinations = [];
+  int index = -1;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // listen to index changes
+    index =
+        Provider.of<ProviderCurrentScreen>(context, listen: true).currentIndex;
+    // listen to destination changes
+    destinations = Provider.of<ProviderNavigationDrawer>(context, listen: true)
+        .destinations;
+    // rebuild destinations when changes
+    Provider.of<ProviderNavigationDrawer>(context, listen: false)
+        .rebuildDestinations(index);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: Provider.of<ProviderNavigationDrawer>(context, listen: true)
-          .destinations,
-    );
+    return Column(children: destinations);
   }
 }
 
 class ProviderNavigationDrawer extends ChangeNotifier {
   var destinations = List.of([
     const SelectedDestination(
-        route: RouteEstudiantes(), text: "Estudiantes", icon: Icons.person_2),
+        index: 0,
+        route: RouteEstudiantes(),
+        text: "Estudiantes",
+        icon: Icons.person_2),
     UnselectedDestination(
+        index: 1,
         route: const RouteCarreras(),
         text: "Carreras",
         icon: Icons.view_list_outlined)
   ]);
 
-  rebuildDestinations(Destination selected) {
-    int indexOfSelected = destinations.indexOf(selected);
-    for (var element in destinations) {
-      destinations[destinations.indexOf(element)] =
-          destinations[indexOfSelected] = UnselectedDestination(
-              route: element.route, text: element.text, icon: element.icon);
+  rebuildDestinations(int indexOfSelected) {
+    for (int i = 0; i < destinations.length; i++) {
+      var element = destinations[i];
+      destinations[i] = UnselectedDestination(
+          index: i,
+          route: element.route,
+          text: element.text,
+          icon: element.icon);
     }
+    var selected = destinations[indexOfSelected];
     destinations[indexOfSelected] = SelectedDestination(
-        route: selected.route, text: selected.text, icon: selected.icon);
+        index: indexOfSelected,
+        route: selected.route,
+        text: selected.text,
+        icon: selected.icon);
     notifyListeners();
   }
 }
 
 class Destination extends StatefulWidget {
+  final int index;
   final Widget route;
   final Color backgroundColor;
   final String text;
@@ -61,6 +86,7 @@ class Destination extends StatefulWidget {
 
   const Destination({
     super.key,
+    required this.index,
     required this.route,
     required this.backgroundColor,
     required this.text,
@@ -88,10 +114,15 @@ class _DestinationState extends State<Destination> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => {
-        Provider.of<ProviderNavigationDrawer>(context, listen: false)
-            .rebuildDestinations(widget),
+        // set screen
         Provider.of<ProviderCurrentScreen>(context, listen: false)
             .setCurrentScreen(widget.route),
+        // set index
+        Provider.of<ProviderCurrentScreen>(context, listen: false)
+            .setCurrentIndex(widget.index),
+        // rebuild destinations
+        Provider.of<ProviderNavigationDrawer>(context, listen: false)
+            .rebuildDestinations(widget.index)
       },
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
@@ -107,8 +138,6 @@ class _DestinationState extends State<Destination> {
             borderRadius: const BorderRadius.only(
               topRight: Radius.circular(500.0),
               bottomRight: Radius.circular(500.0),
-              // topLeft: Radius.circular(40.0),
-              // bottomLeft: Radius.circular(40.0)
             ),
           ),
           width: widget.widthOfDestination,
@@ -129,12 +158,13 @@ class _DestinationState extends State<Destination> {
 }
 
 class UnselectedDestination extends Destination {
-  UnselectedDestination(
-      {super.key,
-      required super.route,
-      required super.text,
-      required super.icon})
-      : super(
+  UnselectedDestination({
+    super.key,
+    required super.index,
+    required super.route,
+    required super.text,
+    required super.icon,
+  }) : super(
             backgroundColor: Colors.transparent,
             textColor: Colors.deepOrange,
             iconColor: Colors.deepOrange,
@@ -145,6 +175,7 @@ class UnselectedDestination extends Destination {
 class SelectedDestination extends Destination {
   const SelectedDestination(
       {super.key,
+      required super.index,
       required super.route,
       required super.text,
       required super.icon})
