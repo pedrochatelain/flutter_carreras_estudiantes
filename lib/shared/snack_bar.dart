@@ -1,7 +1,9 @@
 import 'package:app_material_3/main.dart';
+import 'package:app_material_3/provider/provider_current_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import '../model/estudiante.dart';
 import '../screen/route_detail_estudiante.dart';
 
@@ -34,7 +36,9 @@ void displaySnackbarEstudianteCreado(Estudiante estudianteCreado) {
       action: SnackBarAction(
           label: "Ver",
           onPressed: () => {
-                navigateTo(RouteDetailEstudiante(estudianteCreado)),
+                Provider.of<ProviderCurrentScreen>(snackbarKey.currentContext!,
+                        listen: false)
+                    .setCurrentScreen(RouteDetailEstudiante(estudianteCreado)),
                 ScaffoldMessenger.of(navKey.currentContext!)
                     .hideCurrentSnackBar()
               }),
