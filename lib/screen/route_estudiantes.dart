@@ -1,8 +1,8 @@
 import 'package:app_material_3/model/estudiante.dart';
 import 'package:app_material_3/provider/provider_estudiantes.dart';
 import 'package:app_material_3/service/service_estudiante.dart';
+import 'package:app_material_3/shared/screen_sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/provider_current_screen.dart';
@@ -131,28 +131,31 @@ class ListTileEstudiante extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var hasTabletOrPhoneWidth = MediaQuery.sizeOf(context).width < 600;
     var nombre = estudiante.nombre.toString();
     var apellido = estudiante.apellido.toString();
     return ListTile(
       enableFeedback: false,
       contentPadding: const EdgeInsets.all(12),
-      // enabled: false,
-      onTap: hasTabletOrPhoneWidth
-          ? () => {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                      child: RouteDetailEstudiante(estudiante),
-                      type: PageTransitionType.rightToLeft,
-                    ))
-              }
-          : () => Provider.of<ProviderCurrentScreen>(context, listen: false)
-              .setCurrentScreen(RouteDetailEstudiante(estudiante)),
+      onTap: () => getSize(context) == DeviceScreen.phone
+          ? displayEstudianteDetailSmallScreen(context)
+          : displayEstudianteDetail(context),
       title: Text("$nombre $apellido"),
       subtitle: Text("${estudiante.edad} años"),
       leading: Icon(color: Colors.deepOrange[300], Icons.person),
       trailing: const Icon(size: 20, Icons.arrow_right),
     );
+  }
+
+  displayEstudianteDetailSmallScreen(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RouteDetailEstudiante(estudiante),
+        ));
+  }
+
+  displayEstudianteDetail(BuildContext context) {
+    Provider.of<ProviderCurrentScreen>(context, listen: false)
+        .setCurrentScreen(RouteDetailEstudiante(estudiante));
   }
 }
