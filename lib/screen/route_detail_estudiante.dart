@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:app_material_3/main.dart';
 import 'package:app_material_3/model/estudiante.dart';
+import 'package:app_material_3/provider/provider_current_screen.dart';
 import 'package:app_material_3/provider/provider_estudiantes.dart';
 import 'package:app_material_3/provider/provider_inscripcion.dart';
+import 'package:app_material_3/screen/route_estudiantes.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -21,24 +23,33 @@ class RouteDetailEstudiante extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
-        body: Column(
-          children: [
-            const PhotoStudent(),
-            NameAndLastname(estudiante: estudiante),
-            const Divider(
-              thickness: .2,
-              indent: 30,
-              endIndent: 30,
-            ),
-            WrapperInfoEstudiante(estudiante: estudiante),
-            const Divider(
-              thickness: .2,
-              indent: 30,
-              endIndent: 30,
-            ),
-            Buttons(estudiante: estudiante)
-          ],
+        appBar: AppBar(
+            leading: IconButton(
+                onPressed: () => {
+                      if (Navigator.canPop(context)) {Navigator.pop(context)},
+                      Provider.of<ProviderCurrentScreen>(context, listen: false)
+                          .setCurrentScreen(const RouteEstudiantes())
+                    },
+                icon: const Icon(Icons.arrow_back))),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const PhotoStudent(),
+              NameAndLastname(estudiante: estudiante),
+              const Divider(
+                thickness: .2,
+                indent: 30,
+                endIndent: 30,
+              ),
+              WrapperInfoEstudiante(estudiante: estudiante),
+              const Divider(
+                thickness: .2,
+                indent: 30,
+                endIndent: 30,
+              ),
+              Buttons(estudiante: estudiante)
+            ],
+          ),
         ));
   }
 }
@@ -103,17 +114,15 @@ class Buttons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ButtonDeleteStudent(estudiante: estudiante),
-          const SizedBox(
-            height: 10,
-          ),
-          ButtonInscribirEstudiante(estudiante: estudiante),
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ButtonDeleteStudent(estudiante: estudiante),
+        const SizedBox(
+          height: 10,
+        ),
+        ButtonInscribirEstudiante(estudiante: estudiante),
+      ],
     );
   }
 }
@@ -136,7 +145,10 @@ class ButtonDeleteStudent extends StatelessWidget {
         onPressed: () async => {
               Provider.of<ProviderEstudiantes>(context, listen: false)
                   .removeStudentFromList(estudiante),
-              navKey.currentState!.pop(),
+              // navKey.currentState!.pop(),
+              if (Navigator.canPop(context)) {Navigator.pop(context)},
+              Provider.of<ProviderCurrentScreen>(context, listen: false)
+                  .setCurrentScreen(const RouteEstudiantes()),
               snackbarKey.currentState!.removeCurrentSnackBar(),
               displayLoadingSnackbar("Borrando estudiante..."),
               deletion =
