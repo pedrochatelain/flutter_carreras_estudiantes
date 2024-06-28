@@ -17,15 +17,6 @@ class ProviderEstudiantes extends ChangeNotifier {
     estudiantes = ServiceEstudiante().getEstudiantes();
   }
 
-  void setEstudiantes(Future<List<Estudiante>> ests) async {
-    estudiantes = ests;
-  }
-
-  void setFechaNacimiento(String fechaNacimiento) {
-    fechaNacimientoController.value = TextEditingValue(text: fechaNacimiento);
-    notifyListeners();
-  }
-
   Future<Estudiante?> addEstudiante(
       String nombre, String apellido, int edad) async {
     http.Response creation =
@@ -53,7 +44,6 @@ class ProviderEstudiantes extends ChangeNotifier {
     nombreController.clear();
     apellidoController.clear();
     edadController.clear();
-    fechaNacimientoController.clear();
   }
 
   bool hasEmptyFields() {
@@ -68,11 +58,6 @@ class ProviderEstudiantes extends ChangeNotifier {
 
   void removeStudentFromList(Estudiante estudiante) {
     estudiantes.then((list) => list.remove(estudiante));
-    notifyListeners();
-  }
-
-  setEdad(d) {
-    edadController.value = TextEditingValue(text: d.toString());
     notifyListeners();
   }
 }
