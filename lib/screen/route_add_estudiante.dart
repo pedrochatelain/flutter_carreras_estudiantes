@@ -118,14 +118,28 @@ class _ContentDialogState extends State<ContentDialog> {
   }
 }
 
-class FechaNacimiento extends StatelessWidget {
+class FechaNacimiento extends StatefulWidget {
   const FechaNacimiento({
     super.key,
   });
 
   @override
+  State<FechaNacimiento> createState() => _FechaNacimientoState();
+}
+
+class _FechaNacimientoState extends State<FechaNacimiento> {
+  late DateTime? date;
+  late TextEditingController birthdateController;
+
+  @override
+  void initState() {
+    super.initState();
+    date = DateTime.now();
+    birthdateController = TextEditingController();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    DateTime? date;
     return GestureDetector(
       onTap: () async => {
         date = await showDatePicker(
@@ -135,23 +149,23 @@ class FechaNacimiento extends StatelessWidget {
             lastDate: DateTime.now()),
         if (date != null)
           {
-            Provider.of<ProviderEstudiantes>(navKey.currentContext!,
-                    listen: false)
-                .setFechaNacimiento(
-                    "${date!.day}/${date!.month}/${date!.year}"),
-            Provider.of<ProviderEstudiantes>(navKey.currentContext!,
-                    listen: false)
-                .setEdad(DateTime.now().difference(date!).abs().inDays ~/ 365),
+            setState(() {
+              birthdateController.value = TextEditingValue(
+                  text: "${date!.day}/${date!.month}/${date!.year}");
+            })
           }
       },
-      child: AbsorbPointer(
-        child: TextFormField(
-            controller: Provider.of<ProviderEstudiantes>(context, listen: true)
-                .fechaNacimientoController,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: AbsorbPointer(
+          child: TextFormField(
+            controller: birthdateController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
-              labelText: "Fecha de nacimiento",
-            )),
+              labelText: 'Fecha de nacimiento',
+            ),
+          ),
+        ),
       ),
     );
   }
