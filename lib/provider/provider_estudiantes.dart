@@ -13,6 +13,10 @@ class ProviderEstudiantes extends ChangeNotifier {
   final edadController = TextEditingController();
   final fechaNacimientoController = TextEditingController();
 
+  ProviderEstudiantes() {
+    estudiantes = ServiceEstudiante().getEstudiantes();
+  }
+
   void setEstudiantes(Future<List<Estudiante>> ests) async {
     estudiantes = ests;
   }

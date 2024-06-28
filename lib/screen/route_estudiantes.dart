@@ -1,6 +1,5 @@
 import 'package:app_material_3/model/estudiante.dart';
 import 'package:app_material_3/provider/provider_estudiantes.dart';
-import 'package:app_material_3/service/service_estudiante.dart';
 import 'package:app_material_3/shared/screen_sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -39,8 +38,6 @@ class DataTableEstudiantesState extends State<DataTableEstudiantes> {
   void initState() {
     super.initState();
     imageOfEmptyClassroom = Image.asset("assets/empty_classroom.jpg");
-    Provider.of<ProviderEstudiantes>(listen: false, context)
-        .setEstudiantes(ServiceEstudiante().getEstudiantes());
   }
 
   @override
