@@ -1,5 +1,6 @@
 import 'package:app_material_3/main.dart';
 import 'package:app_material_3/provider/provider_current_screen.dart';
+import 'package:app_material_3/shared/screen_sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:page_transition/page_transition.dart';
@@ -36,9 +37,18 @@ void displaySnackbarEstudianteCreado(Estudiante estudianteCreado) {
       action: SnackBarAction(
           label: "Ver",
           onPressed: () => {
-                Provider.of<ProviderCurrentScreen>(snackbarKey.currentContext!,
-                        listen: false)
-                    .setCurrentScreen(RouteDetailEstudiante(estudianteCreado)),
+                getSize(snackbarKey.currentContext!) == DeviceScreen.laptop
+                    ? Provider.of<ProviderCurrentScreen>(
+                            snackbarKey.currentContext!,
+                            listen: false)
+                        .setCurrentScreen(
+                            RouteDetailEstudiante(estudianteCreado))
+                    : Navigator.push(
+                        navKey.currentContext!,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              RouteDetailEstudiante(estudianteCreado),
+                        )),
                 ScaffoldMessenger.of(navKey.currentContext!)
                     .hideCurrentSnackBar()
               }),
