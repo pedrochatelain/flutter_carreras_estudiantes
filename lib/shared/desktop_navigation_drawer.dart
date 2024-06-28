@@ -29,8 +29,9 @@ class _DesktopNavigationDrawerState extends State<DesktopNavigationDrawer> {
     destinations = Provider.of<ProviderNavigationDrawer>(context, listen: true)
         .destinations;
     // rebuild destinations when changes
-    Provider.of<ProviderNavigationDrawer>(context, listen: false)
-        .rebuildDestinations(index);
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        Provider.of<ProviderNavigationDrawer>(context, listen: false)
+            .rebuildDestinations(index));
   }
 
   @override
