@@ -13,6 +13,11 @@ import 'shared/main_speed_dial.dart';
 
 final snackbarKey = GlobalKey<ScaffoldMessengerState>();
 final navKey = GlobalKey<NavigatorState>();
+bool isAdmin() {
+  return Provider.of<ProviderLogin>(navKey.currentContext!)
+      .userLoggedIn
+      .isAdmin();
+}
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -72,7 +77,7 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: const MainSpeedDial(),
+        floatingActionButton: isAdmin() ? const MainSpeedDial() : null,
         bottomNavigationBar: hasTabletOrPhoneWidth
             ? const bottom_nav.BottomNavigationBar()
             : null,

@@ -114,16 +114,18 @@ class Buttons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ButtonDeleteStudent(estudiante: estudiante),
-        const SizedBox(
-          height: 10,
-        ),
-        ButtonInscribirEstudiante(estudiante: estudiante),
-      ],
-    );
+    return isAdmin()
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ButtonDeleteStudent(estudiante: estudiante),
+              const SizedBox(
+                height: 10,
+              ),
+              ButtonInscribirEstudiante(estudiante: estudiante),
+            ],
+          )
+        : const Column();
   }
 }
 
@@ -214,9 +216,11 @@ class WrapperInfoEstudiante extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(
-                    onPressed: () => {},
-                    icon: const Icon(color: Colors.deepOrange, Icons.edit)),
+                isAdmin()
+                    ? IconButton(
+                        onPressed: () => {},
+                        icon: const Icon(color: Colors.deepOrange, Icons.edit))
+                    : const SizedBox.shrink(),
               ],
             ),
           ],
