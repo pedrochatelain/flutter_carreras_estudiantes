@@ -1,3 +1,4 @@
+import 'package:app_material_3/provider/provider_login.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:app_material_3/provider/provider_estudiantes.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'provider/provider_carreras.dart';
 import 'provider/provider_current_screen.dart';
+import 'screen/route_login.dart';
 import 'shared/bottom_navigation_bar.dart' as bottom_nav;
 import 'shared/desktop_navigation_drawer.dart';
 import 'shared/main_speed_dial.dart';
@@ -29,6 +31,9 @@ void main() {
         ChangeNotifierProvider(
           create: (context) => ProviderNavigationDrawer(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => ProviderLogin(),
+        ),
       ],
       child: MaterialApp(
         navigatorKey: navKey,
@@ -42,7 +47,7 @@ void main() {
                   WidgetStatePropertyAll(TextStyle(color: Colors.white))),
           useMaterial3: true,
         ),
-        home: const MainApp(),
+        home: const RouteLogin(),
       ),
     ),
   );

@@ -72,7 +72,9 @@ class DataTableEstudiantesState extends State<DataTableEstudiantes> {
         } else if (snapshot.hasError) {
           return Text(snapshot.error.toString());
         }
-        return const Center(child: CircularProgressIndicator());
+        return const LinearProgressIndicator(
+          color: Colors.deepOrange,
+        );
       },
     );
   }
